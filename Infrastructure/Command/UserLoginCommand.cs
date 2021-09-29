@@ -5,13 +5,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Database.Model
+namespace Infrastructure.Command
 {
-    public class Category : BaseEntity
+    public class UserLoginCommand
     {
         [Required]
         [EmailAddress]
-        [StringLength(maximumLength: 100)]
-        public string Name { get; set; }
+        public string Email { get; set; }
+        [Required]
+        public string Password { get; set; }
     }
 }

@@ -1,0 +1,2 @@
+﻿dotnet ef migrations add Init -p Database/ -s AvtoZapchasti/
+dotnet ef database update -p Database/ -s AvtoZapchasti/

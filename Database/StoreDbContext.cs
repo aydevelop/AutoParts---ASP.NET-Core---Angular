@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Database.Model;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -8,9 +9,12 @@ using System.Threading.Tasks;
 
 namespace Database
 {
-    class StoreDbContext : IdentityDbContext
+    public class StoreDbContext : IdentityDbContext
     {
         public StoreDbContext(DbContextOptions<StoreDbContext> options) : base(options)
         { }
+
+        public DbSet<AppUser> AppUsers { get; set; }
+        public DbSet<Category> Categories { get; set; }
     }
 }

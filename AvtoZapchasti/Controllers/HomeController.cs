@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Database.Model;
+using Database.Repository;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,10 +12,24 @@ namespace AvtoZapchasti.Controllers
     [Route("api")]
     public class HomeController : ControllerBase
     {
+        private readonly ICategoryRepository categoryRepository;
+
+        public HomeController(ICategoryRepository categoryRepository)
+        {
+            this.categoryRepository = categoryRepository;
+        }
+
         [HttpGet]
         public IActionResult Index()
         {
             return Content("HomeController Index");
+        }
+
+        [HttpGet("categories")]
+        public async Task<ActionResult<IEnumerable<Category>>> Categories()
+        {
+            var result = await categoryRepository.GetAll(); 
+            return result;
         }
     }
 }

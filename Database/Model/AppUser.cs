@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Database.Model
 {
-    public class User : IdentityUser
+    public class AppUser : IdentityUser
     {
         public string SiteUrl { get; set; }
     }
