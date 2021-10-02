@@ -17,7 +17,7 @@ namespace AvtoZapchasti.Util
         public static async Task<AuthenticationResponse> BuildToken(string email, UserManager<AppUser> userManager, String keyjwt)
         {
             var claims = new List<Claim>() { new Claim("email", email) };
-            var user = await userManager.FindByNameAsync(email);
+            var user = await userManager.FindByEmailAsync(email);
             var claimsDB = await userManager.GetClaimsAsync(user);
             claims.AddRange(claimsDB);
 
