@@ -2,7 +2,7 @@
 
 namespace Database.Model
 {
-    public class Category : BaseEntity
+    public class Brand : BaseEntity
     {
         [Required]
         public string Name { get; set; }
