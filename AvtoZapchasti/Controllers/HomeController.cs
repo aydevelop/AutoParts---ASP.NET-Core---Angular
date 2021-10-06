@@ -1,4 +1,5 @@
-﻿using Database.Model;
+﻿using Database.Contracts;
+using Database.Model;
 using Database.Repository;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;

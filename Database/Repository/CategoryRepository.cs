@@ -1,18 +1,11 @@
-﻿using Database.Model;
+﻿using Database.Contracts;
+using Database.Model;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Database.Repository
 {
-    public interface ICategoryRepository
-    {
-        Task<List<Category>> GetAll();
-    }
-
     public class CategoryRepository : ICategoryRepository
     {
         private readonly StoreDbContext context;

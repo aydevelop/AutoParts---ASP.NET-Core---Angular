@@ -1,4 +1,5 @@
 using Database;
+using Infrastructure.Provider;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -28,11 +29,12 @@ namespace AvtoZapchasti
             }
             catch (Exception ex)
             {
-
                 logger.LogError(ex, "An error occured during migration");
             }
 
-            await host.RunAsync();
+
+            new AutokladUa(context).Run();
+            //await host.RunAsync();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>

@@ -1,7 +1,8 @@
 using Database;
+using Database.Contracts;
 using Database.Model;
 using Database.Repository;
-using Infrastructure.Provider;
+using Infrastructure.Provider.Base;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -33,7 +34,7 @@ namespace AvtoZapchasti
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddHostedService<BaseProvider>();
+            services.AddHostedService<HostedService>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
 
             services.AddDbContext<StoreDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
