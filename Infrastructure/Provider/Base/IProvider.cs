@@ -1,7 +1,16 @@
-﻿namespace Infrastructure.Provider.Base
+﻿using HtmlAgilityPack;
+
+namespace Infrastructure.Provider.Base
 {
-    public interface IProvider
+    public abstract class AbsProvider
     {
-        void Run();
+        public abstract void Run();
+
+        public HtmlDocument DocLoad(string url)
+        {
+            var htmlWeb = new HtmlWeb();
+            var document = htmlWeb.Load(url);
+            return document;
+        }
     }
 }

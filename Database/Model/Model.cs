@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace Database.Model
 {
@@ -6,5 +7,8 @@ namespace Database.Model
     {
         [Required]
         public string Name { get; set; }
+
+        public Guid BrandId { get; set; }
+        public virtual Brand Brand { get; set; }
     }
 }

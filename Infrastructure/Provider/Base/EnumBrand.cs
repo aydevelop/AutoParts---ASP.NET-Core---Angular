@@ -1,4 +1,4 @@
-﻿namespace Infrastructure.Provider.Base
+﻿namespace Infrastructure.Enum
 {
     public enum EnumBrand
     {

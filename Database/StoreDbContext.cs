@@ -13,5 +13,6 @@ namespace Database
         public DbSet<Category> Categories { get; set; }
         public DbSet<Brand> Brands { get; set; }
         public DbSet<Database.Model.Model> Models { get; set; }
+        public DbSet<Spare> Spares { get; set; }
     }
 }

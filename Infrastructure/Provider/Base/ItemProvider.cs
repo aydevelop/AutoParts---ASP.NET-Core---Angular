@@ -1,4 +1,6 @@
-﻿namespace Infrastructure.Provider.Base
+﻿using Infrastructure.Enum;
+
+namespace Infrastructure.Provider.Base
 {
     public class ItemProvider
     {
