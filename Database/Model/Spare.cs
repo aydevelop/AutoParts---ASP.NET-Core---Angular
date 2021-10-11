@@ -17,6 +17,9 @@ namespace Database.Model
         [Required]
         public string Description { get; set; }
 
+        [Required]
+        public string Url { get; set; }
+
 
         public Guid ModelId { get; set; }
         public virtual Model Model { get; set; }

@@ -20,6 +20,8 @@ namespace AvtoZapchasti
             var context = services.GetRequiredService<StoreDbContext>();
             var logger = services.GetRequiredService<ILogger<Program>>();
 
+            //new AutokladUa(context).Run();
+
             try
             {
                 await context.Database.MigrateAsync();
@@ -32,7 +34,6 @@ namespace AvtoZapchasti
             }
 
 
-            //new AutokladUa(context).Run();
             await host.RunAsync();
         }
 

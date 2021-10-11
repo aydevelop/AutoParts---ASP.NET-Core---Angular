@@ -1,4 +1,4 @@
-﻿using AvtoZapchasti.Util;
+﻿using AvtoZapchasti.Extensions;
 using Database.Model;
 using Infrastructure.ApiModel;
 using Infrastructure.Command;
@@ -41,7 +41,7 @@ namespace AvtoZapchasti.Controllers
 
             if (result.Succeeded)
             {
-                return await Security.BuildToken(user.Email, userManager, configuration["keyjwt"]);
+                return await userManager.GetTokenAsync<AppUser>(user.Email, configuration["keyjwt"]);
             }
             else
             {
@@ -55,7 +55,7 @@ namespace AvtoZapchasti.Controllers
             var result = await signInManager.PasswordSignInAsync(userLoginCommand.Email, userLoginCommand.Password, isPersistent: false, lockoutOnFailure: false);
             if (result.Succeeded)
             {
-                return await Security.BuildToken(userLoginCommand.Email, userManager, configuration["keyjwt"]);
+                return await userManager.GetTokenAsync<AppUser>(userLoginCommand.Email, configuration["keyjwt"]);
             }
             else
             {
