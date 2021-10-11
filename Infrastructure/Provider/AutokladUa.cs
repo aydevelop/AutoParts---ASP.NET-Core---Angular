@@ -105,6 +105,7 @@ namespace Infrastructure.Provider
         public void Step4(string url, Model model, Category category)
         {
             var document = DocLoad(url);
+            string html = document.DocumentNode.InnerText;
 
             string name = document.DocumentNode.SelectSingleNode("//h1[@class='o-section-title o-head-title']").InnerText;
             string price = document.DocumentNode.SelectSingleNode("//*[@class='o-price']").InnerText;

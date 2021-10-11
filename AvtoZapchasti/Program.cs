@@ -1,5 +1,4 @@
 using Database;
-using Infrastructure.Provider;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -33,8 +32,8 @@ namespace AvtoZapchasti
             }
 
 
-            new AutokladUa(context).Run();
-            //await host.RunAsync();
+            //new AutokladUa(context).Run();
+            await host.RunAsync();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
