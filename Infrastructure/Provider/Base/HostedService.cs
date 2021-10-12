@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Hosting;
+﻿using Database;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading;
@@ -10,11 +12,14 @@ namespace Infrastructure.Provider.Base
     public class HostedService : IHostedService, IDisposable
     {
         private readonly ILogger<HostedService> _logger;
-        private Timer _timer;
+        private readonly StoreDbContext _db;
+        //private Timer _timer;
 
-        public HostedService(ILogger<HostedService> logger)
+        public HostedService(ILogger<HostedService> logger, IServiceProvider provider)
         {
             _logger = logger;
+            _db = provider.CreateScope().ServiceProvider.GetRequiredService<StoreDbContext>();
+            _logger.LogInformation("HostedService Service is init");
         }
 
         private void DoWork(object state)
@@ -24,8 +29,18 @@ namespace Infrastructure.Provider.Base
 
         public Task StartAsync(CancellationToken stoppingToken)
         {
-            _logger.LogInformation("HostedService Service is running");
-            _timer = new Timer(DoWork, null, TimeSpan.Zero, TimeSpan.FromSeconds(5));
+            _logger.LogInformation("HostedService Service is start");
+            //_timer = new Timer(DoWork, null, TimeSpan.Zero, TimeSpan.FromSeconds(5));
+
+            Task.Factory.StartNew(async () =>
+            {
+                while (true)
+                {
+                    await Task.Delay(1000 * 60 * 60 * 24);
+                    new AutokladUa(_db, _logger).Run();
+                }
+            });
+
             return Task.CompletedTask;
         }
 
@@ -37,7 +52,8 @@ namespace Infrastructure.Provider.Base
 
         public void Dispose()
         {
-            _timer?.Dispose();
+            //_timer?.Dispose();
+            _db?.Dispose();
         }
     }
 }

@@ -7,7 +7,6 @@ namespace Database.Model
     public abstract class BaseEntity
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public virtual Guid Id { get; set; }
     }
 }

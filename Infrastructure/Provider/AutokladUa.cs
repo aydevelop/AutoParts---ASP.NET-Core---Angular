@@ -3,6 +3,7 @@ using Database.Model;
 using HtmlAgilityPack;
 using Infrastructure.Enum;
 using Infrastructure.Provider.Base;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 
@@ -11,11 +12,16 @@ namespace Infrastructure.Provider
     public class AutokladUa : AbsProvider
     {
         private readonly string host = "https://www.autoklad.ua";
-        public AutokladUa(StoreDbContext context) : base(context) { }
+        private readonly ILogger<HostedService> _logger;
+
+        public AutokladUa(StoreDbContext db, ILogger<HostedService> logger) : base(db)
+        {
+            this._logger = logger;
+        }
 
         List<ItemProvider> providers = new List<ItemProvider>()
         {
-            //new ItemProvider() { brand = EnumBrand.Audi, url = "https://www.autoklad.ua/cars/audi/" },
+            new ItemProvider() { brand = EnumBrand.Audi, url = "https://www.autoklad.ua/cars/audi/" },
             new ItemProvider() { brand = EnumBrand.BMW, url = "https://www.autoklad.ua/cars/bmw/" },
             new ItemProvider() { brand = EnumBrand.Mercedes, url = "https://www.autoklad.ua/cars/mercedes/" },
             new ItemProvider() { brand = EnumBrand.Volkswagen, url = "https://www.autoklad.ua/cars/vw/" },
@@ -23,13 +29,22 @@ namespace Infrastructure.Provider
 
         public override void Run()
         {
-            foreach (var item in providers)
+            _logger.LogInformation($"Start {host}");
+
+            try
             {
-                currentBrand = brands.Find(b => b.Name == item.brand.ToString());
-                if (currentBrand != null)
+                foreach (var item in providers)
                 {
-                    Step1(item);
+                    currentBrand = brands.Find(b => b.Name == item.brand.ToString());
+                    if (currentBrand != null)
+                    {
+                        Step1(item);
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
             }
         }
 
