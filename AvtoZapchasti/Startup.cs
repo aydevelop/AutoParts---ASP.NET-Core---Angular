@@ -1,6 +1,9 @@
-using AvtoZapchasti.Extensions;
+using AvtoZapchasti.Extension;
+using AvtoZapchasti.Middleware;
 using Database;
+using Database.Contract;
 using Database.Model;
+using Database.Repository;
 using Infrastructure.Provider.Base;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -26,7 +29,9 @@ namespace AvtoZapchasti
             services.AddControllers();
             services.AddDbContext<StoreDbContext>(q => q.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddIdentity<AppUser, IdentityRole>().AddEntityFrameworkStores<StoreDbContext>().AddDefaultTokenProviders();
-            services.AddHostedService<HostedService>();
+            services.AddHostedService<ProviderRunner>();
+
+            services.AddTransient<ICategoryRepository, CategoryRepository>();
 
             services.AddTokenAuthentication(Configuration["keyjwt"]);
             services.AddSwaggerDocumentation();
@@ -38,6 +43,8 @@ namespace AvtoZapchasti
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UseMiddleware<ExceptionMiddleware>();
             app.UseStaticFiles();
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
 

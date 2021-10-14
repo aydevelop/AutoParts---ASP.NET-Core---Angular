@@ -12,9 +12,9 @@ namespace Infrastructure.Provider
     public class AutokladUa : AbsProvider
     {
         private readonly string host = "https://www.autoklad.ua";
-        private readonly ILogger<HostedService> _logger;
+        private readonly ILogger<ProviderRunner> _logger;
 
-        public AutokladUa(StoreDbContext db, ILogger<HostedService> logger) : base(db)
+        public AutokladUa(StoreDbContext db, ILogger<ProviderRunner> logger) : base(db)
         {
             this._logger = logger;
         }

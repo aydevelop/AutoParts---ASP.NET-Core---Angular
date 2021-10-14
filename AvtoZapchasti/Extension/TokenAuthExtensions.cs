@@ -10,9 +10,9 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AvtoZapchasti.Extensions
+namespace AvtoZapchasti.Extension
 {
-    public static class TokenAuthExtensions
+    public static class TokenAuthExtension
     {
         public static IServiceCollection AddTokenAuthentication(this IServiceCollection services, String keyjwt)
         {

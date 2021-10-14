@@ -1,4 +1,4 @@
-﻿using AvtoZapchasti.Extensions;
+﻿using AvtoZapchasti.Extension;
 using Database;
 using Database.Model;
 using Infrastructure.ApiModel;
@@ -19,7 +19,7 @@ namespace AvtoZapchasti.Controllers
         private readonly SignInManager<AppUser> signInManager;
         private readonly IConfiguration configuration;
 
-        public AuthController(StoreDbContext db, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IConfiguration configuration) : base(db)
+        public AuthController(StoreDbContext db, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IConfiguration configuration)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;

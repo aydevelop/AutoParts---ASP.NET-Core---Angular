@@ -9,13 +9,13 @@ using System.Threading.Tasks;
 namespace Infrastructure.Provider.Base
 {
 
-    public class HostedService : IHostedService, IDisposable
+    public class ProviderRunner : IHostedService, IDisposable
     {
-        private readonly ILogger<HostedService> _logger;
+        private readonly ILogger<ProviderRunner> _logger;
         private readonly StoreDbContext _db;
         //private Timer _timer;
 
-        public HostedService(ILogger<HostedService> logger, IServiceProvider provider)
+        public ProviderRunner(ILogger<ProviderRunner> logger, IServiceProvider provider)
         {
             _logger = logger;
             _db = provider.CreateScope().ServiceProvider.GetRequiredService<StoreDbContext>();

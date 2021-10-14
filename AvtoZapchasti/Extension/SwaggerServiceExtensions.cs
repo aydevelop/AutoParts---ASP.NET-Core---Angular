@@ -4,9 +4,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 
-namespace AvtoZapchasti.Extensions
+namespace AvtoZapchasti.Extension
 {
-    public static class SwaggerServiceExtensions
+    public static class SwaggerServiceExtension
     {
         public static IServiceCollection AddSwaggerDocumentation(this IServiceCollection services)
         {
@@ -40,7 +40,6 @@ namespace AvtoZapchasti.Extensions
         {
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "AvtoZapchasti v1"));
             }
