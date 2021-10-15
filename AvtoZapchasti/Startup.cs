@@ -29,22 +29,23 @@ namespace AvtoZapchasti
             services.AddControllers();
             services.AddDbContext<StoreDbContext>(q => q.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddIdentity<AppUser, IdentityRole>().AddEntityFrameworkStores<StoreDbContext>().AddDefaultTokenProviders();
-            services.AddHostedService<ProviderRunner>();
+            services.AddHostedService<TaskRunner>();
 
             services.AddTransient<ICategoryRepository, CategoryRepository>();
 
             services.AddTokenAuthentication(Configuration["keyjwt"]);
             services.AddSwaggerDocumentation();
+            services.AddApplicationServices();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, StoreDbContext dbContext)
         {
+            app.UseMiddleware<ExceptionMiddleware>();
             app.UseHttpsRedirection();
+
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
-
-            app.UseMiddleware<ExceptionMiddleware>();
             app.UseStaticFiles();
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
 

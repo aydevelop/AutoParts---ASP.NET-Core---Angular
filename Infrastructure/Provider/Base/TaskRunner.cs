@@ -9,13 +9,13 @@ using System.Threading.Tasks;
 namespace Infrastructure.Provider.Base
 {
 
-    public class ProviderRunner : IHostedService, IDisposable
+    public class TaskRunner : IHostedService, IDisposable
     {
-        private readonly ILogger<ProviderRunner> _logger;
+        private readonly ILogger<TaskRunner> _logger;
         private readonly StoreDbContext _db;
-        //private Timer _timer;
+        private Timer _timer;
 
-        public ProviderRunner(ILogger<ProviderRunner> logger, IServiceProvider provider)
+        public TaskRunner(ILogger<TaskRunner> logger, IServiceProvider provider)
         {
             _logger = logger;
             _db = provider.CreateScope().ServiceProvider.GetRequiredService<StoreDbContext>();
@@ -25,22 +25,13 @@ namespace Infrastructure.Provider.Base
         private void DoWork(object state)
         {
             _logger.LogInformation("DoWork");
+            new AutokladUa(_db, _logger).Run();
         }
 
         public Task StartAsync(CancellationToken stoppingToken)
         {
             _logger.LogInformation("HostedService Service is start");
-            //_timer = new Timer(DoWork, null, TimeSpan.Zero, TimeSpan.FromSeconds(5));
-
-            Task.Factory.StartNew(async () =>
-            {
-                while (true)
-                {
-                    await Task.Delay(1000 * 60 * 60 * 24);
-                    new AutokladUa(_db, _logger).Run();
-                }
-            });
-
+            _timer = new Timer(DoWork, null, TimeSpan.FromHours(24), TimeSpan.FromHours(24));
             return Task.CompletedTask;
         }
 
@@ -52,7 +43,7 @@ namespace Infrastructure.Provider.Base
 
         public void Dispose()
         {
-            //_timer?.Dispose();
+            _timer?.Dispose();
             _db?.Dispose();
         }
     }

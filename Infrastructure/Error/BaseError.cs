@@ -1,11 +1,11 @@
 ﻿namespace Infrastructure.Error
 {
-    public class ApiResponse
+    public class BaseError
     {
         public int StatusCode { get; set; }
         public string Message { get; set; }
 
-        public ApiResponse(int statusCode, string message = null)
+        public BaseError(int statusCode, string message = null)
         {
             StatusCode = statusCode;
             Message = message ?? GetDefaultMessageForStatusCode(statusCode);

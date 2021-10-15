@@ -21,7 +21,7 @@ namespace AvtoZapchasti.Middleware
             _next = next;
         }
 
-        public async Task InvokeAsync(HttpContext context)
+        public async Task Invoke(HttpContext context)
         {
             try
             {
@@ -34,8 +34,8 @@ namespace AvtoZapchasti.Middleware
                 context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 
                 var response = _env.IsDevelopment()
-                   ? new ApiException((int)HttpStatusCode.InternalServerError, ex.Message, ex.StackTrace.ToString())
-                   : new ApiException((int)HttpStatusCode.InternalServerError);
+                   ? new ExceptionError((int)HttpStatusCode.InternalServerError, ex.Message, ex.StackTrace.ToString())
+                   : new ExceptionError((int)HttpStatusCode.InternalServerError);
 
                 var json = JsonSerializer.Serialize(response);
                 await context.Response.WriteAsync(json);

@@ -3,55 +3,79 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Database.Repository
 {
     public class BaseRepository<T> : IRepository<T> where T : class
     {
-        protected readonly StoreDbContext context;
+        private const int _DbConcurrencyResolveRetryLimit = 4;
+        private readonly StoreDbContext _context;
+
         public BaseRepository(StoreDbContext context)
         {
             context.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
-            this.context = context;
-
+            _context = context;
         }
-        private void Save() => context.SaveChanges();
-        public void Add(T entity)
+        private async Task SaveAsync()
         {
-            context.Add(entity);
-            Save();
+            var retryCount = _DbConcurrencyResolveRetryLimit;
+            while (retryCount > 0)
+            {
+                try
+                {
+                    await _context.SaveChangesAsync();
+                    return;
+                }
+                catch (Exception)
+                {
+                    if (retryCount == 1)
+                    {
+                        throw;
+                    }
+                }
+
+                --retryCount;
+            }
+        }
+
+        public async Task Add(T entity)
+        {
+            _context.Add(entity);
+            await SaveAsync();
         }
 
         public int Count(Func<T, bool> predicate)
         {
-            return context.Set<T>().Where(predicate).Count();
+            return _context.Set<T>().Where(predicate).Count();
         }
 
         public void Delete(T entity)
         {
-            context.Remove(entity);
-            Save();
+            _context.Remove(entity);
+            SaveAsync();
         }
 
-        public IEnumerable<T> GetAll()
+        public Task<T[]> GetAll()
         {
-            return context.Set<T>().ToList();
+
+            return _context.Set<T>().ToArrayAsync();
         }
 
         public IEnumerable<T> GetByFiler(Func<T, bool> predicate)
         {
-            return context.Set<T>().Where(predicate).ToList();
+            return _context.Set<T>().Where(predicate).ToList();
         }
 
-        public T GetById(int id)
+        public async Task<T> GetById(Guid id)
         {
-            return context.Set<T>().Find(id);
+            return await _context.Set<T>().FindAsync(id);
         }
 
         public void Update(T entity)
         {
-            context.Entry(entity).State = EntityState.Modified;
-            Save();
+            _context.Entry(entity).State = EntityState.Modified;
+            SaveAsync();
         }
     }
 }

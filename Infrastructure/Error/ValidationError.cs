@@ -2,9 +2,9 @@
 
 namespace Infrastructure.Error
 {
-    public class ApiErrorResponse : ApiResponse
+    public class ValidationError : BaseError
     {
-        public ApiErrorResponse() : base(400)
+        public ValidationError() : base(400)
         {
         }
 

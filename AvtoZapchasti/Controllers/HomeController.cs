@@ -1,5 +1,4 @@
-﻿using Infrastructure.Error;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.IO;
@@ -33,10 +32,5 @@ namespace AvtoZapchasti.Controllers
             return Content(logs);
         }
 
-        [HttpGet("error")]
-        public ActionResult Error([FromServices] IConfiguration Configuration)
-        {
-            return new ObjectResult(new ApiErrorResponse { Errors = new[] { "Test Error !!!" } });
-        }
     }
 }

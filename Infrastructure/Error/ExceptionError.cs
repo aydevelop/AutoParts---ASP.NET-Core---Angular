@@ -1,9 +1,9 @@
 ﻿namespace Infrastructure.Error
 {
-    public class ApiException : ApiResponse
+    public class ExceptionError : BaseError
     {
         public string Details { get; set; }
-        public ApiException(int statusCode, string message = null, string details = null)
+        public ExceptionError(int statusCode, string message = null, string details = null)
             : base(statusCode, message)
         {
             Details = details;
