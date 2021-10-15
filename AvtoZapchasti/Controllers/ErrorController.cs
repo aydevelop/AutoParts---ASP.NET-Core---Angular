@@ -7,34 +7,36 @@ namespace AvtoZapchasti.Controllers
     [ApiExplorerSettings(IgnoreApi = true)]
     public class ErrorController : BaseController
     {
-        [HttpGet]
-        [HttpGet("valerror")]
-        public IActionResult Error()
+        [HttpGet("validation-error")]
+        public ActionResult Error()
         {
-            return new ObjectResult(new ValidationError { Errors = new[] { "The Name field is required" } });
+            return BadRequest(new ValidationError
+            {
+                Errors = new[] { "The Name field is required", "The Password field is required" }
+            });
         }
 
-        [HttpGet("notfound")]
-        public IActionResult GetNotFoundRequest()
+        [HttpGet("not-found")]
+        public ActionResult GetNotFoundRequest()
         {
-            return new ObjectResult(new BaseError(404));
+            return NotFound(E(404));
         }
 
-        [HttpGet("badrequest")]
-        public IActionResult GetBadRequest()
+        [HttpGet("bad-request")]
+        public ActionResult GetBadRequest()
         {
-            return new ObjectResult(new BaseError(400));
+            return BadRequest(E(400));
         }
 
-        [HttpGet("servererror")]
-        public IActionResult GetServerError()
+        [HttpGet("server-error")]
+        public ActionResult GetServerError()
         {
             object thing = null;
             return Ok(thing.ToString());
         }
 
-        [HttpGet("testauth")]
         [Authorize]
+        [HttpGet("test-auth")]
         public ActionResult<string> GetSecretText()
         {
             return "secret stuff";

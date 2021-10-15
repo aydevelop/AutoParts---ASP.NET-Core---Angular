@@ -9,7 +9,7 @@ namespace AvtoZapchasti.Controllers
     public class HomeController : BaseController
     {
         [HttpGet]
-        public IActionResult Index()
+        public ActionResult Index()
         {
             return Content("HomeControllerIndex");
         }

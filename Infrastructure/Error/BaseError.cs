@@ -1,9 +1,9 @@
 ﻿namespace Infrastructure.Error
 {
-    public class BaseError
+    public abstract class BaseError
     {
-        public int StatusCode { get; set; }
-        public string Message { get; set; }
+        public int StatusCode { get; }
+        public string Message { get; }
 
         public BaseError(int statusCode, string message = null)
         {

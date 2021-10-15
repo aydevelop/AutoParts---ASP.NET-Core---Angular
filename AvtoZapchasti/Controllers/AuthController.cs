@@ -27,7 +27,7 @@ namespace AvtoZapchasti.Controllers
         }
 
         [HttpGet]
-        public IActionResult Index()
+        public ActionResult Index()
         {
             return Content("AuthController Index");
         }

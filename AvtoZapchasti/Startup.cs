@@ -36,6 +36,7 @@ namespace AvtoZapchasti
             services.AddTokenAuthentication(Configuration["keyjwt"]);
             services.AddSwaggerDocumentation();
             services.AddApplicationServices();
+            services.AddCorsServices();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, StoreDbContext dbContext)
@@ -50,6 +51,7 @@ namespace AvtoZapchasti
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
 
             app.UseSwaggerDocumentation(env);
+            app.UseCorsServices();
         }
     }
 }

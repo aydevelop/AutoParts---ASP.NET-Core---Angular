@@ -50,10 +50,10 @@ namespace Database.Repository
             return _context.Set<T>().Where(predicate).Count();
         }
 
-        public void Delete(T entity)
+        public async Task Delete(T entity)
         {
             _context.Remove(entity);
-            SaveAsync();
+            await SaveAsync();
         }
 
         public Task<T[]> GetAll()
@@ -72,10 +72,10 @@ namespace Database.Repository
             return await _context.Set<T>().FindAsync(id);
         }
 
-        public void Update(T entity)
+        public async Task Update(T entity)
         {
             _context.Entry(entity).State = EntityState.Modified;
-            SaveAsync();
+            await SaveAsync();
         }
     }
 }

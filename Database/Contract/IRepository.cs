@@ -10,8 +10,8 @@ namespace Database.Contract
         IEnumerable<T> GetByFiler(Func<T, bool> predicate);
         Task<T> GetById(Guid id);
         Task Add(T entity);
-        void Update(T entity);
-        void Delete(T entity);
+        Task Update(T entity);
+        Task Delete(T entity);
         int Count(Func<T, bool> predicate);
     }
 }
