@@ -9,7 +9,7 @@ namespace Database.Repository
 {
     public class BaseRepository<T> : IRepository<T> where T : class
     {
-        private const int _DbConcurrencyResolveRetryLimit = 4;
+        private const int _DbConcurrencyResolveRetryLimit = 5;
         private readonly AppDbContext _context;
 
         public BaseRepository(AppDbContext context)

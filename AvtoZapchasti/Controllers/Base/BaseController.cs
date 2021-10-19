@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 
-namespace AvtoZapchasti.Controllers
+namespace AvtoZapchasti.Controllers.Base
 {
     [Route("api/[controller]")]
     [ApiController]

@@ -1,4 +1,5 @@
-﻿using AvtoZapchasti.Extension;
+﻿using AvtoZapchasti.Controllers.Base;
+using AvtoZapchasti.Extension;
 using Database;
 using Database.Model;
 using Infrastructure.Response.Auth;

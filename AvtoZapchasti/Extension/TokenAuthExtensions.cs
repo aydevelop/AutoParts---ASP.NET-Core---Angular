@@ -1,5 +1,7 @@
-﻿using Infrastructure.Response.Auth;
+﻿using Infrastructure.Error;
+using Infrastructure.Response.Auth;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -8,6 +10,7 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace AvtoZapchasti.Extension
@@ -26,6 +29,19 @@ namespace AvtoZapchasti.Extension
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(keyjwt)),
                     ClockSkew = TimeSpan.Zero
+                };
+
+                options.Events = new JwtBearerEvents
+                {
+                    OnChallenge = async context =>
+                    {
+                        context.HandleResponse();
+                        context.Response.ContentType = "application/json";
+                        context.Response.StatusCode = 401;
+                        var response = new ExceptionError(401, details: "You are not authorized");
+                        var json = JsonSerializer.Serialize(response);
+                        await context.Response.WriteAsync(json);
+                    }
                 };
             });
 

@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace AvtoZapchasti.Controllers
+namespace AvtoZapchasti.Controllers.Base
 {
     [ApiExplorerSettings(IgnoreApi = true)]
     public class ErrorController : BaseController

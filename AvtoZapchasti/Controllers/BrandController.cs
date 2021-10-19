@@ -4,9 +4,9 @@ using Database.Model;
 
 namespace AvtoZapchasti.Controllers
 {
-    public class CategoryController : CrudController<Category>
+    public class BrandController : CrudController<Brand>
     {
-        public CategoryController(IRepository<Category> db) : base(db)
+        public BrandController(IRepository<Brand> db) : base(db)
         { }
     }
 }

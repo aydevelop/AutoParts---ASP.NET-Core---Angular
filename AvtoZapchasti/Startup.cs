@@ -30,6 +30,7 @@ namespace AvtoZapchasti
             services.AddSwaggerDocumentation();
             services.AddCorsServices();
 
+            services.AddTransient(typeof(IRepository<>), typeof(BaseRepository<>));
             services.AddTransient<ICategoryRepository, CategoryRepository>();
         }
 
