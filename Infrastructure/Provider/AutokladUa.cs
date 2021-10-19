@@ -14,7 +14,7 @@ namespace Infrastructure.Provider
         private readonly string host = "https://www.autoklad.ua";
         private readonly ILogger<TaskRunner> _logger;
 
-        public AutokladUa(StoreDbContext db, ILogger<TaskRunner> logger) : base(db)
+        public AutokladUa(AppDbContext db, ILogger<TaskRunner> logger) : base(db)
         {
             this._logger = logger;
         }

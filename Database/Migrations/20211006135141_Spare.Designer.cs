@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Database.Migrations
 {
-    [DbContext(typeof(StoreDbContext))]
+    [DbContext(typeof(AppDbContext))]
     [Migration("20211006135141_Spare")]
     partial class Spare
     {

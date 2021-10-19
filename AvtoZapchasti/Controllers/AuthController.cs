@@ -1,8 +1,8 @@
 ﻿using AvtoZapchasti.Extension;
 using Database;
 using Database.Model;
-using Infrastructure.ApiModel;
-using Infrastructure.Command;
+using Infrastructure.Response.Auth;
+using Infrastructure.User.Action;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -19,7 +19,7 @@ namespace AvtoZapchasti.Controllers
         private readonly SignInManager<AppUser> signInManager;
         private readonly IConfiguration configuration;
 
-        public AuthController(StoreDbContext db, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IConfiguration configuration)
+        public AuthController(AppDbContext db, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IConfiguration configuration)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
@@ -33,10 +33,10 @@ namespace AvtoZapchasti.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<ActionResult<AuthenticationResponse>> RegisterAsync([FromBody] UserRegisterCommand userRegisterCommand)
+        public async Task<ActionResult<AuthResponse>> RegisterAsync([FromBody] UserRegisterAction userRegisterAction)
         {
-            var user = new AppUser { UserName = userRegisterCommand.UserName, Email = userRegisterCommand.Email };
-            var result = await userManager.CreateAsync(user, userRegisterCommand.Password);
+            var user = new AppUser { UserName = userRegisterAction.UserName, Email = userRegisterAction.Email };
+            var result = await userManager.CreateAsync(user, userRegisterAction.Password);
 
             if (result.Succeeded)
             {
@@ -44,21 +44,21 @@ namespace AvtoZapchasti.Controllers
             }
             else
             {
-                return BadRequest(result.Errors);
+                return BadRequest(Error(result.Errors.Select(q => q.Description)));
             }
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult<AuthenticationResponse>> Login([FromBody] UserLoginCommand userLoginCommand)
+        public async Task<ActionResult<AuthResponse>> Login([FromBody] UserLoginAction userLoginAction)
         {
-            var result = await signInManager.PasswordSignInAsync(userLoginCommand.Email, userLoginCommand.Password, isPersistent: false, lockoutOnFailure: false);
+            var result = await signInManager.PasswordSignInAsync(userLoginAction.Email, userLoginAction.Password, isPersistent: false, lockoutOnFailure: false);
             if (result.Succeeded)
             {
-                return await userManager.GetTokenAsync<AppUser>(userLoginCommand.Email, configuration["keyjwt"]);
+                return await userManager.GetTokenAsync<AppUser>(userLoginAction.Email, configuration["keyjwt"]);
             }
             else
             {
-                return BadRequest("Incorrect Login");
+                return BadRequest(Error(new[] { "Incorrect Login" }));
             }
         }
 
@@ -66,11 +66,9 @@ namespace AvtoZapchasti.Controllers
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<AppUser> Me()
         {
-            var email = HttpContext.User.Claims.FirstOrDefault(x => x.Type == "email")?.Value;
-            if (email == null)
-            {
-                return new AppUser();
-            }
+            var email = HttpContext.User.FindFirst("email")?.Value;
+            if (email == null) { return new AppUser(); }
+            var test = await userManager.FindByEmailAsync(email);
 
             return await userManager.FindByEmailAsync(email);
         }

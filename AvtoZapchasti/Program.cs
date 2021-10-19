@@ -19,12 +19,14 @@ namespace AvtoZapchasti
             using var scope = host.Services.CreateScope();
             var services = scope.ServiceProvider;
 
-            var db = services.GetRequiredService<StoreDbContext>();
+            var db = services.GetRequiredService<AppDbContext>();
             var logger = services.GetRequiredService<ILogger<Program>>();
             var loggerFactory = services.GetRequiredService<ILoggerFactory>();
             var config = services.GetRequiredService<IConfiguration>();
             loggerFactory.AddFile(Path.Combine($"{Directory.GetCurrentDirectory()}", config["logfile"]));
-            //new AutokladUa(context).Run();
+
+            //var taskLogger = services.GetRequiredService<ILogger<TaskRunner>>();
+            //new AutokladUa(db, taskLogger).Run();
 
             try
             {

@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Infrastructure.Command
+namespace Infrastructure.User.Action
 {
-    public class UserRegisterCommand : UserLoginCommand
+    public class UserRegisterAction : UserLoginAction
     {
         [Required]
         public string UserName { get; set; }

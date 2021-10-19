@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace Infrastructure.ApiModel
+namespace Infrastructure.Response.Auth
 {
-    public class AuthenticationResponse
+    public class AuthResponse
     {
         public string Token { get; set; }
         public DateTime Expiration { get; set; }

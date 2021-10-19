@@ -1,5 +1,6 @@
 ﻿using Infrastructure.Error;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 
 namespace AvtoZapchasti.Controllers
 {
@@ -7,9 +8,14 @@ namespace AvtoZapchasti.Controllers
     [ApiController]
     public class BaseController : ControllerBase
     {
-        protected ExceptionError E(int statusCode, string message = null, string details = null)
+        protected ExceptionError Error(string details = null, string message = null)
         {
-            return new ExceptionError(statusCode, message, details);
+            return new ExceptionError(message: message, details: details);
+        }
+
+        protected ValidationError Error(IEnumerable<string> Errors)
+        {
+            return new ValidationError { Errors = Errors };
         }
     }
 }

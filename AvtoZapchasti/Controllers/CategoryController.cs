@@ -22,14 +22,20 @@ namespace AvtoZapchasti.Controllers
         }
 
         [HttpGet("{id:guid}")]
-        public async Task<Category> GetById(Guid id)
+        public async Task<ActionResult<Category>> GetById(Guid id)
         {
-            return await _categoryRepository.GetById(id);
+            var result = await _categoryRepository.GetById(id);
+            if (result == null) { return NotFound(Error("Category not found")); }
+
+            return result;
         }
 
         [HttpPost]
         public async Task<ActionResult> Create(Category category)
         {
+            var result = await _categoryRepository.GetByFiler(q => q.Name == category.Name);
+            if (result.Length > 0) { return BadRequest(Error("Сategory already exists ")); }
+
             await _categoryRepository.Add(category);
             return NoContent();
         }
@@ -39,7 +45,7 @@ namespace AvtoZapchasti.Controllers
         public async Task<ActionResult> Put(Guid id, Category category)
         {
             var result = await _categoryRepository.GetById(id);
-            if (result == null) { return NotFound(E(404)); }
+            if (result == null) { return NotFound(Error("Category not found")); }
 
             category.Id = id;
             category.Name = null;
@@ -51,7 +57,7 @@ namespace AvtoZapchasti.Controllers
         public async Task<ActionResult> Delete(Guid id)
         {
             var result = await _categoryRepository.GetById(id);
-            if (result == null) { return NotFound(E(404)); }
+            if (result == null) { return NotFound(Error("Category not found")); }
 
             await _categoryRepository.Delete(result);
             return NoContent();

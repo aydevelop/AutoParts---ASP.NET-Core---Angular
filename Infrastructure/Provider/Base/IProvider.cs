@@ -13,13 +13,13 @@ namespace Infrastructure.Provider.Base
         protected List<Model> models = new List<Model>();
         protected List<Brand> brands = new List<Brand>();
         protected List<Category> categories = new List<Category>();
-        protected readonly StoreDbContext context;
+        protected readonly AppDbContext context;
         protected Brand currentBrand;
         protected HtmlDocument doc;
         protected HtmlNode DNode => doc.DocumentNode;
         protected List<string> total = new List<string>();
 
-        public AbsProvider(StoreDbContext context)
+        public AbsProvider(AppDbContext context)
         {
             this.context = context;
             models = context.Models.Include(u => u.Brand).ToList();

@@ -5,6 +5,6 @@ namespace Database.Repository
 {
     public class CategoryRepository : BaseRepository<Category>, ICategoryRepository
     {
-        public CategoryRepository(StoreDbContext context) : base(context) { }
+        public CategoryRepository(AppDbContext context) : base(context) { }
     }
 }

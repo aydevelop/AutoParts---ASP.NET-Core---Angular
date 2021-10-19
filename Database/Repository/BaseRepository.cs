@@ -1,8 +1,8 @@
 ﻿using Database.Contract;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace Database.Repository
@@ -10,9 +10,9 @@ namespace Database.Repository
     public class BaseRepository<T> : IRepository<T> where T : class
     {
         private const int _DbConcurrencyResolveRetryLimit = 4;
-        private readonly StoreDbContext _context;
+        private readonly AppDbContext _context;
 
-        public BaseRepository(StoreDbContext context)
+        public BaseRepository(AppDbContext context)
         {
             context.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
             _context = context;
@@ -62,9 +62,9 @@ namespace Database.Repository
             return _context.Set<T>().ToArrayAsync();
         }
 
-        public IEnumerable<T> GetByFiler(Func<T, bool> predicate)
+        public async Task<T[]> GetByFiler(Expression<Func<T, bool>> predicate)
         {
-            return _context.Set<T>().Where(predicate).ToList();
+            return await _context.Set<T>().Where(predicate).ToArrayAsync();
         }
 
         public async Task<T> GetById(Guid id)

@@ -19,13 +19,13 @@ namespace AvtoZapchasti.Controllers
         [HttpGet("not-found")]
         public ActionResult GetNotFoundRequest()
         {
-            return NotFound(E(404));
+            return NotFound(Error());
         }
 
         [HttpGet("bad-request")]
         public ActionResult GetBadRequest()
         {
-            return BadRequest(E(400));
+            return BadRequest(Error());
         }
 
         [HttpGet("server-error")]

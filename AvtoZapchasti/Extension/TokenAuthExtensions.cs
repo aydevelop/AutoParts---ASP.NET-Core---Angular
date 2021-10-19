@@ -1,4 +1,4 @@
-﻿using Infrastructure.ApiModel;
+﻿using Infrastructure.Response.Auth;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
@@ -32,13 +32,14 @@ namespace AvtoZapchasti.Extension
             return services;
         }
 
-        public static async Task<AuthenticationResponse> GetTokenAsync<T>(this UserManager<T> manager, string email, String keyjwt) where T : IdentityUser
+        public static async Task<AuthResponse> GetTokenAsync<T>(this UserManager<T> manager, string email, String keyjwt) where T : IdentityUser
         {
             var claims = new List<Claim>() { new Claim("email", email) };
             var user = await manager.FindByEmailAsync(email);
+            if (user == null) { return new AuthResponse(); }
+
             var claimsDB = await manager.GetClaimsAsync(user);
             claims.AddRange(claimsDB);
-
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(keyjwt));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
@@ -46,7 +47,7 @@ namespace AvtoZapchasti.Extension
             var token = new JwtSecurityToken(issuer: null, audience: null, claims: claims,
                 expires: expiration, signingCredentials: creds);
 
-            return new AuthenticationResponse()
+            return new AuthResponse()
             {
                 Token = new JwtSecurityTokenHandler().WriteToken(token),
                 Expiration = expiration

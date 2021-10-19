@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace Database.Contract
@@ -7,7 +7,7 @@ namespace Database.Contract
     public interface IRepository<T> where T : class
     {
         Task<T[]> GetAll();
-        IEnumerable<T> GetByFiler(Func<T, bool> predicate);
+        Task<T[]> GetByFiler(Expression<Func<T, bool>> predicate);
         Task<T> GetById(Guid id);
         Task Add(T entity);
         Task Update(T entity);

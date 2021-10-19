@@ -2,13 +2,10 @@ using AvtoZapchasti.Extension;
 using AvtoZapchasti.Middleware;
 using Database;
 using Database.Contract;
-using Database.Model;
 using Database.Repository;
 using Infrastructure.Provider.Base;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.IdentityModel.Tokens.Jwt;
@@ -27,19 +24,16 @@ namespace AvtoZapchasti
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddDbContext<StoreDbContext>(q => q.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddIdentity<AppUser, IdentityRole>().AddEntityFrameworkStores<StoreDbContext>().AddDefaultTokenProviders();
+            services.AddApplicationServices(Configuration);
             services.AddHostedService<TaskRunner>();
-
-            services.AddTransient<ICategoryRepository, CategoryRepository>();
-
             services.AddTokenAuthentication(Configuration["keyjwt"]);
             services.AddSwaggerDocumentation();
-            services.AddApplicationServices();
             services.AddCorsServices();
+
+            services.AddTransient<ICategoryRepository, CategoryRepository>();
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, StoreDbContext dbContext)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, AppDbContext dbContext)
         {
             app.UseMiddleware<ExceptionMiddleware>();
             app.UseHttpsRedirection();

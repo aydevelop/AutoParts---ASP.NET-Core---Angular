@@ -2,12 +2,10 @@
 {
     public abstract class BaseError
     {
-        public int StatusCode { get; }
         public string Message { get; }
 
         public BaseError(int statusCode, string message = null)
         {
-            StatusCode = statusCode;
             Message = message ?? GetDefaultMessageForStatusCode(statusCode);
         }
 

@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Infrastructure.Command
+namespace Infrastructure.User.Action
 {
-    public class UserLoginCommand
+    public class UserLoginAction
     {
         [Required]
         [EmailAddress]

@@ -8,7 +8,7 @@ namespace Database
 {
     public class DbSeed
     {
-        public static async Task SeedAsync(StoreDbContext context)
+        public static async Task SeedAsync(AppDbContext context)
         {
             if (!context.Brands.Any())
             {

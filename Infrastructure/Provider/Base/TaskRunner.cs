@@ -12,13 +12,13 @@ namespace Infrastructure.Provider.Base
     public class TaskRunner : IHostedService, IDisposable
     {
         private readonly ILogger<TaskRunner> _logger;
-        private readonly StoreDbContext _db;
+        private readonly AppDbContext _db;
         private Timer _timer;
 
         public TaskRunner(ILogger<TaskRunner> logger, IServiceProvider provider)
         {
             _logger = logger;
-            _db = provider.CreateScope().ServiceProvider.GetRequiredService<StoreDbContext>();
+            _db = provider.CreateScope().ServiceProvider.GetRequiredService<AppDbContext>();
             _logger.LogInformation("HostedService Service is init");
         }
 
