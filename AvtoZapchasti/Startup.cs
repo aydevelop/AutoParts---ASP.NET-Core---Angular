@@ -3,7 +3,8 @@ using AvtoZapchasti.Middleware;
 using Database;
 using Database.Contract;
 using Database.Repository;
-using Infrastructure.Provider.Base;
+using FluentValidation.AspNetCore;
+using Infrastructure.Util;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -23,15 +24,18 @@ namespace AvtoZapchasti
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<AppDbContext>()); ;
+
             services.AddApplicationServices(Configuration);
-            services.AddHostedService<TaskRunner>();
+            //services.AddHostedService<TaskRunner>();
             services.AddTokenAuthentication(Configuration["keyjwt"]);
             services.AddSwaggerDocumentation();
             services.AddCorsServices();
+            services.AddPolicyServices();
 
             services.AddTransient(typeof(IRepository<>), typeof(BaseRepository<>));
             services.AddTransient<ICategoryRepository, CategoryRepository>();
+            services.AddAutoMapper(typeof(AutoMapperConfig));
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, AppDbContext dbContext)

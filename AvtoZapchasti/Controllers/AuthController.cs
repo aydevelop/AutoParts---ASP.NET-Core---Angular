@@ -1,7 +1,9 @@
-﻿using AvtoZapchasti.Controllers.Base;
+﻿using AutoMapper;
+using AvtoZapchasti.Controllers.Base;
 using AvtoZapchasti.Extension;
 using Database;
 using Database.Model;
+using Infrastructure.DtoResponse;
 using Infrastructure.Response.Auth;
 using Infrastructure.User.Action;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -19,12 +21,14 @@ namespace AvtoZapchasti.Controllers
         private readonly UserManager<AppUser> userManager;
         private readonly SignInManager<AppUser> signInManager;
         private readonly IConfiguration configuration;
+        private readonly IMapper mapper;
 
-        public AuthController(AppDbContext db, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IConfiguration configuration)
+        public AuthController(AppDbContext db, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IConfiguration configuration, IMapper mapper)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
             this.configuration = configuration;
+            this.mapper = mapper;
         }
 
         [HttpGet]
@@ -52,7 +56,13 @@ namespace AvtoZapchasti.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<AuthResponse>> Login([FromBody] UserLoginAction userLoginAction)
         {
-            var result = await signInManager.PasswordSignInAsync(userLoginAction.Email, userLoginAction.Password, isPersistent: false, lockoutOnFailure: false);
+            var user = await userManager.FindByEmailAsync(userLoginAction.Email);
+            if (user == null)
+            {
+                return BadRequest(Error(new[] { "Incorrect Login" }));
+            }
+
+            var result = await signInManager.PasswordSignInAsync(user, userLoginAction.Password, true, false);
             if (result.Succeeded)
             {
                 return await userManager.GetTokenAsync<AppUser>(userLoginAction.Email, configuration["keyjwt"]);
@@ -65,13 +75,15 @@ namespace AvtoZapchasti.Controllers
 
         [HttpPost("me")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public async Task<AppUser> Me()
+        public async Task<UserResponse> Me()
         {
             var email = HttpContext.User.FindFirst("email")?.Value;
-            if (email == null) { return new AppUser(); }
-            var test = await userManager.FindByEmailAsync(email);
+            if (email == null) { return new UserResponse(); }
 
-            return await userManager.FindByEmailAsync(email);
+            var me = await userManager.FindByEmailAsync(email);
+            var result = mapper.Map<AppUser, UserResponse>(me);
+
+            return result;
         }
     }
 }

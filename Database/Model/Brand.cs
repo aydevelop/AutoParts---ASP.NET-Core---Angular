@@ -1,10 +1,17 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using FluentValidation;
 
 namespace Database.Model
 {
     public class Brand : BaseEntity
     {
-        [Required]
         public string Name { get; set; }
+    }
+
+    public class BrandValidator : AbstractValidator<Brand>
+    {
+        public BrandValidator()
+        {
+            RuleFor(p => p.Name).NotEmpty();
+        }
     }
 }

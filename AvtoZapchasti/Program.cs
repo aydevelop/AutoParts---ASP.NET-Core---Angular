@@ -1,5 +1,7 @@
 using Database;
+using Database.Model;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -28,10 +30,13 @@ namespace AvtoZapchasti
             //var taskLogger = services.GetRequiredService<ILogger<TaskRunner>>();
             //new AutokladUa(db, taskLogger).Run();
 
+            UserManager<AppUser> userManager = services.GetRequiredService<UserManager<AppUser>>();
+
             try
             {
+                await db.Database.EnsureDeletedAsync();
                 await db.Database.MigrateAsync();
-                await DbSeed.SeedAsync(db);
+                await DbSeed.SeedAsync(db, userManager);
                 logger.LogInformation("Migration completed");
             }
             catch (Exception ex)

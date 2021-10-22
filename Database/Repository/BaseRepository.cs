@@ -9,7 +9,6 @@ namespace Database.Repository
 {
     public class BaseRepository<T> : IRepository<T> where T : class
     {
-        private const int _DbConcurrencyResolveRetryLimit = 5;
         private readonly AppDbContext _context;
 
         public BaseRepository(AppDbContext context)
@@ -17,25 +16,17 @@ namespace Database.Repository
             context.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
             _context = context;
         }
+
         private async Task SaveAsync()
         {
-            var retryCount = _DbConcurrencyResolveRetryLimit;
-            while (retryCount > 0)
+            try
             {
-                try
-                {
-                    await _context.SaveChangesAsync();
-                    return;
-                }
-                catch (Exception)
-                {
-                    if (retryCount == 1)
-                    {
-                        throw;
-                    }
-                }
-
-                --retryCount;
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                string msg = ex.InnerException.Message;
+                throw;
             }
         }
 

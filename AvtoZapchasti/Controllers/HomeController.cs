@@ -1,4 +1,6 @@
 ﻿using AvtoZapchasti.Controllers.Base;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -15,7 +17,7 @@ namespace AvtoZapchasti.Controllers
             return Content("HomeControllerIndex");
         }
 
-        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
         [HttpGet("logs")]
         public ActionResult Logs([FromServices] IConfiguration Configuration)
         {

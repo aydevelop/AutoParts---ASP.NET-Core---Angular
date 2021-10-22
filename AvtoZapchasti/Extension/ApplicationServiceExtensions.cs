@@ -37,7 +37,7 @@ namespace AvtoZapchasti.Extension
                         Errors = errors
                     };
 
-                    return new ObjectResult(errorResponse);
+                    return new BadRequestObjectResult(errorResponse);
                 };
             });
 
