@@ -36,9 +36,14 @@ namespace Database.Repository
             await SaveAsync();
         }
 
-        public int Count(Func<T, bool> predicate)
+        public Task<int> Count(Expression<Func<T, bool>> predicate)
         {
-            return _context.Set<T>().Where(predicate).Count();
+            return _context.Set<T>().Where(predicate).CountAsync();
+        }
+
+        public Task<int> Count()
+        {
+            return _context.Set<T>().CountAsync();
         }
 
         public async Task Delete(T entity)
@@ -49,13 +54,18 @@ namespace Database.Repository
 
         public Task<T[]> GetAll()
         {
-
             return _context.Set<T>().ToArrayAsync();
         }
 
         public async Task<T[]> GetByFiler(Expression<Func<T, bool>> predicate)
         {
             return await _context.Set<T>().Where(predicate).ToArrayAsync();
+        }
+
+        public async Task<T[]> GetByFilerWithPaging(Expression<Func<T, bool>> predicate, int skip, int take)
+        {
+            return await _context.Set<T>().Where(predicate)
+                .Skip(skip).Take(take).ToArrayAsync();
         }
 
         public async Task<T> GetById(Guid id)

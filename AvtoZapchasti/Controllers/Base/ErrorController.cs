@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AvtoZapchasti.Controllers.Base
 {
-    //[ApiExplorerSettings(IgnoreApi = true)]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class ErrorController : BaseController
     {
         [HttpGet("validation-error")]

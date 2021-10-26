@@ -24,7 +24,6 @@ namespace Infrastructure.Provider
             new ItemProvider() { brand = EnumBrand.Audi, url = "https://www.autoklad.ua/cars/audi/" },
             new ItemProvider() { brand = EnumBrand.BMW, url = "https://www.autoklad.ua/cars/bmw/" },
             new ItemProvider() { brand = EnumBrand.Mercedes, url = "https://www.autoklad.ua/cars/mercedes/" },
-            new ItemProvider() { brand = EnumBrand.Volkswagen, url = "https://www.autoklad.ua/cars/vw/" },
         };
 
         public override void Run()
@@ -57,7 +56,7 @@ namespace Infrastructure.Provider
             {
                 string url = host + link.Attributes["href"].Value;
                 string model = link.InnerText.Replace("Запчасти на", "");
-                model = model.Replace("VW", "Volkswagen");
+                model = model.Substring(currentBrand.Name.Length + 1).Trim();
                 Step2(url, model);
             }
         }
@@ -70,15 +69,16 @@ namespace Infrastructure.Provider
             foreach (HtmlNode link in links)
             {
                 string urlItem = host + link.Attributes["href"].Value;
-                string tmp = link.InnerText.Replace(model, "").Trim();
-                string category = tmp.Substring(0, tmp.Length - 3);
-                model = model.Substring(currentBrand.Name.Length + 1).Trim();
+                string category = link.InnerText.Split(new[] { " на " }, StringSplitOptions.None)[0];
+
+
                 Step3(urlItem, model, category);
             }
         }
 
         public void Step3(string url, string model, string category)
         {
+            Console.WriteLine(url);
             Model checkModel = AddModelIfNotExist(model);
             Category checkCategory = AddCategoryIfNotExist(category);
 
@@ -92,7 +92,7 @@ namespace Infrastructure.Provider
                 if (!total.Contains(urlItem) && !urlItem.Contains("javascript") && urlItem != host)
                 {
                     total.Add(urlItem);
-                    Console.WriteLine(urlItem);
+                    Console.WriteLine("\t" + urlItem);
                     Step4(urlItem, checkModel, checkCategory);
                 }
             }
@@ -110,7 +110,7 @@ namespace Infrastructure.Provider
 
             Spare spare = new Spare();
             spare.Name = name;
-            spare.Price = price;
+            spare.Price = Convert.ToDouble(price);
             spare.ImageUrl = image;
             spare.Description = description;
             spare.CategoryId = category.Id;

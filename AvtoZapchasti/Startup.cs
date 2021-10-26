@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.IdentityModel.Tokens.Jwt;
+using System.Text.Json.Serialization;
 
 namespace AvtoZapchasti
 {
@@ -24,10 +25,13 @@ namespace AvtoZapchasti
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<AppDbContext>()); ;
+            services.AddControllers()
+                .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<AppDbContext>())
+                .AddJsonOptions(options =>
+                    options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull);
 
-            services.AddApplicationServices(Configuration);
             //services.AddHostedService<TaskRunner>();
+            services.AddApplicationServices(Configuration);
             services.AddTokenAuthentication(Configuration["keyjwt"]);
             services.AddSwaggerDocumentation();
             services.AddCorsServices();
