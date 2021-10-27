@@ -10,27 +10,32 @@ using System.Threading.Tasks;
 
 namespace AvtoZapchasti.Controllers
 {
-    public class SpareController : BaseController
+    public class SpareController : CrudController<Spare>
     {
-        private readonly IRepository<Spare> _db;
-        public SpareController(IRepository<Spare> db)
+        private readonly ISpareRepository _db;
+
+        public SpareController(ISpareRepository db) : base(db)
         {
             _db = db;
         }
 
-        [HttpGet]
+        [HttpGet("filter")]
         public virtual async Task<Pagination<Spare>> GetByFilter([FromQuery] SpareParamsAction spareParams)
         {
             Expression<Func<Spare, bool>> criteria = (q =>
-                (!spareParams.MaxPrice.HasValue || q.Price <= spareParams.MaxPrice) &&
-                (!spareParams.MinPrice.HasValue || q.Price >= spareParams.MinPrice)
-            );
+             (!spareParams.CategoryId.HasValue || q.CategoryId == spareParams.CategoryId) &&
+             (!spareParams.BrandId.HasValue || q.Model.BrandId == spareParams.BrandId) &&
+             (!spareParams.MaxPrice.HasValue || q.Price <= spareParams.MaxPrice) &&
+             (!spareParams.MinPrice.HasValue || q.Price >= spareParams.MinPrice) &&
+             (string.IsNullOrWhiteSpace(spareParams.Search) || q.Name.ToLower().Contains(spareParams.Search))
+          );
 
-            var total = await _db.Count();
-            int skip = spareParams.PageSize * (spareParams.PageIndex - 1);
-            var spares = await _db.GetByFilerWithPaging(criteria, skip, spareParams.PageSize);
+            int total = await _db.Count();
+            int take = spareParams.PageSize;
+            int skip = take * (spareParams.PageIndex - 1);
 
-            return new Pagination<Spare>(spareParams.PageIndex, spareParams.PageSize, total, spares);
+            Spare[] spares = await _db.GetByFilerWithPaging(criteria, skip, take, "priceAsk");
+            return new Pagination<Spare>(spareParams.PageIndex, take, total, spares);
         }
     }
 }

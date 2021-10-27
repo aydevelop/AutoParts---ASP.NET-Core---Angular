@@ -62,12 +62,6 @@ namespace Database.Repository
             return await _context.Set<T>().Where(predicate).ToArrayAsync();
         }
 
-        public async Task<T[]> GetByFilerWithPaging(Expression<Func<T, bool>> predicate, int skip, int take)
-        {
-            return await _context.Set<T>().Where(predicate)
-                .Skip(skip).Take(take).ToArrayAsync();
-        }
-
         public async Task<T> GetById(Guid id)
         {
             return await _context.Set<T>().FindAsync(id);

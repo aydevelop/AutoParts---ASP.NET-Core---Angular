@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace AvtoZapchasti.Controllers.Base
 {
+    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
     public abstract class CrudController<T> : BaseController where T : BaseEntity
     {
         private readonly IRepository<T> _db;

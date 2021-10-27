@@ -1,12 +1,13 @@
 ﻿using AvtoZapchasti.Controllers.Base;
 using Database.Contract;
 using Database.Model;
+using Database.Repository;
 
 namespace AvtoZapchasti.Controllers
 {
     public class CategoryController : CrudController<Category>
     {
-        public CategoryController(IRepository<Category> db) : base(db)
+        public CategoryController(ICategoryRepository db) : base(db)
         { }
     }
 }

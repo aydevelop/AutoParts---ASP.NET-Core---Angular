@@ -39,6 +39,7 @@ namespace AvtoZapchasti
 
             services.AddTransient(typeof(IRepository<>), typeof(BaseRepository<>));
             services.AddTransient<ICategoryRepository, CategoryRepository>();
+            services.AddTransient<ISpareRepository, SpareRepository>();
             services.AddAutoMapper(typeof(AutoMapperConfig));
         }
 

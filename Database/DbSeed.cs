@@ -19,11 +19,6 @@ namespace Database
                     new Brand
                     {
                         Id = Guid.NewGuid(),
-                        Name = "Volkswagen"
-                    },
-                    new Brand
-                    {
-                        Id = Guid.NewGuid(),
                         Name = "Audi"
                     },
                     new Brand

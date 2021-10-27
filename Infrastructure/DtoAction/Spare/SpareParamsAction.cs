@@ -1,7 +1,11 @@
-﻿namespace Infrastructure.DtoAction.Spare
+﻿using System;
+
+namespace Infrastructure.DtoAction.Spare
 {
     public class SpareParamsAction
     {
+        public Guid? CategoryId { get; set; }
+        public Guid? BrandId { get; set; }
         public double? MaxPrice { get; set; }
         public double? MinPrice { get; set; }
 
@@ -13,6 +17,13 @@
         {
             get => _pageSize;
             set => _pageSize = (value > _maxPageSize) ? _maxPageSize : value;
+        }
+
+        private string _search;
+        public string Search
+        {
+            get => _search;
+            set => _search = value.ToLower();
         }
     }
 }

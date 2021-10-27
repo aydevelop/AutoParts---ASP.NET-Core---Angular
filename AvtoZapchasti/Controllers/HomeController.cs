@@ -17,8 +17,8 @@ namespace AvtoZapchasti.Controllers
             return Content("HomeControllerIndex");
         }
 
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
         [HttpGet("logs")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
         public ActionResult Logs([FromServices] IConfiguration Configuration)
         {
             var path = Path.Combine($"{Directory.GetCurrentDirectory()}", Configuration["logfile"]);
