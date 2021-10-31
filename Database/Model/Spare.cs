@@ -6,7 +6,7 @@ namespace Database.Model
     public class Spare : BaseEntity
     {
         public string Name { get; set; }
-        public double Price { get; set; }
+        public decimal Price { get; set; }
         public string ImageUrl { get; set; }
         public string Description { get; set; }
         public string Url { get; set; }
@@ -16,6 +16,9 @@ namespace Database.Model
 
         public Guid CategoryId { get; set; }
         public virtual Category Category { get; set; }
+
+        public Guid ProviderId { get; set; }
+        public virtual Provider Provider { get; set; }
     }
 
     public class SpareValidator : AbstractValidator<Spare>

@@ -6,7 +6,7 @@ namespace AvtoZapchasti.Controllers.Base
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class BaseController : ControllerBase
+    public abstract class BaseController : ControllerBase
     {
         protected ExceptionError Error(string details = null, string message = null)
         {

@@ -12,6 +12,7 @@ namespace Database
         public DbSet<Brand> Brands { get; set; }
         public DbSet<_Model> Models { get; set; }
         public DbSet<Spare> Spares { get; set; }
+        public DbSet<Provider> Providers { get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         { }
@@ -35,6 +36,8 @@ namespace Database
             modelBuilder.Entity<Spare>().Property(s => s.ImageUrl).IsRequired();
             modelBuilder.Entity<Spare>().Property(s => s.Description).IsRequired();
             modelBuilder.Entity<Spare>().Property(s => s.Url).IsRequired();
+
+            modelBuilder.Entity<Spare>().Property(p => p.Price).HasColumnType("decimal(18,4)");
         }
     }
 }

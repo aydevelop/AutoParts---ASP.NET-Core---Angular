@@ -6,8 +6,8 @@ namespace Infrastructure.DtoAction.Spare
     {
         public Guid? CategoryId { get; set; }
         public Guid? BrandId { get; set; }
-        public double? MaxPrice { get; set; }
-        public double? MinPrice { get; set; }
+        public decimal? MaxPrice { get; set; }
+        public decimal? MinPrice { get; set; }
 
         public int PageIndex { get; set; } = 1;
         private const int _maxPageSize = 100;

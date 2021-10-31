@@ -6,10 +6,11 @@ using Infrastructure.Provider.Base;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Infrastructure.Provider
 {
-    public class AutokladUa : AbsProvider
+    public class AutokladUa : BaseProvider
     {
         private readonly string host = "https://www.autoklad.ua";
         private readonly ILogger<TaskRunner> _logger;
@@ -29,9 +30,24 @@ namespace Infrastructure.Provider
         public override void Run()
         {
             _logger.LogInformation($"Start {host}");
+            var checkProvider = context.Providers.FirstOrDefault(q => q.SiteUrl == host);
+
+            if (checkProvider == null)
+            {
+                Database.Model.Provider pr = new Database.Model.Provider() { Name = host, SiteUrl = host };
+                context.Providers.Add(pr);
+                providerId = pr.Id;
+            }
+            else
+            {
+                providerId = checkProvider.Id;
+            }
 
             try
             {
+                context.Spares.RemoveRange(context.Spares.Where(q => q.ProviderId == providerId));
+                context.SaveChanges();
+
                 foreach (var item in providers)
                 {
                     currentBrand = brands.Find(b => b.Name == item.brand.ToString());
@@ -110,12 +126,13 @@ namespace Infrastructure.Provider
 
             Spare spare = new Spare();
             spare.Name = name;
-            spare.Price = Convert.ToDouble(price);
+            spare.Price = Convert.ToDecimal(price);
             spare.ImageUrl = image;
             spare.Description = description;
             spare.CategoryId = category.Id;
             spare.ModelId = model.Id;
             spare.Url = url;
+            spare.ProviderId = providerId;
 
             context.Spares.Add(spare);
             context.SaveChanges();

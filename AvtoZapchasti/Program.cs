@@ -1,5 +1,6 @@
 using Database;
 using Database.Model;
+using Infrastructure.Provider;
 using Infrastructure.Provider.Base;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -29,7 +30,7 @@ namespace AvtoZapchasti
             loggerFactory.AddFile(Path.Combine($"{Directory.GetCurrentDirectory()}", config["logfile"]));
 
             var taskLogger = services.GetRequiredService<ILogger<TaskRunner>>();
-            //new AutokladUa(db, taskLogger).Run();
+            new AutokladUa(db, taskLogger).Run();
 
             UserManager<AppUser> userManager = services.GetRequiredService<UserManager<AppUser>>();
 

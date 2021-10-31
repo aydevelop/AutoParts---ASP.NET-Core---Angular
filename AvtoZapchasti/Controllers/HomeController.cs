@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.IO;
+using System.Net;
 
 namespace AvtoZapchasti.Controllers
 {
@@ -23,14 +24,23 @@ namespace AvtoZapchasti.Controllers
         {
             var path = Path.Combine($"{Directory.GetCurrentDirectory()}", Configuration["logfile"]);
             var dir = Path.GetDirectoryName(path);
+            var files = Directory.EnumerateFiles(dir, "*.txt");
             var logs = "";
+            var filename = "";
 
-            foreach (string item in Directory.EnumerateFiles(dir, "*.txt"))
+            try
             {
-                logs += Path.GetFileName(item) + Environment.NewLine;
-                logs += System.IO.File.ReadAllText(item) + Environment.NewLine;
-                logs += Environment.NewLine;
+                foreach (string item in files)
+                {
+                    filename = item;
+                    logs += Environment.NewLine;
+                    logs += Path.GetFileName(item) + Environment.NewLine;
+                    logs += System.IO.File.ReadAllText(item) + Environment.NewLine;
+                    logs += Environment.NewLine;
+                }
             }
+            catch (Exception)
+            { }
 
             return Content(logs);
         }

@@ -23,10 +23,11 @@ namespace Database.Repository
             {
                 await _context.SaveChangesAsync();
             }
-            catch (Exception ex)
+            catch (DbUpdateConcurrencyException ex)
             {
-                string msg = ex.InnerException.Message;
-                throw;
+                // https://msdn.microsoft.com/en-in/data/jj592904.aspx
+                var entry = ex.Entries.Single();
+                entry.OriginalValues.SetValues(entry.GetDatabaseValues());
             }
         }
 

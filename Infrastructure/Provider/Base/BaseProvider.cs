@@ -2,24 +2,26 @@
 using Database.Model;
 using HtmlAgilityPack;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
 namespace Infrastructure.Provider.Base
 {
-    public abstract class AbsProvider
+    public abstract class BaseProvider
     {
         protected List<Model> models = new List<Model>();
         protected List<Brand> brands = new List<Brand>();
         protected List<Category> categories = new List<Category>();
         protected readonly AppDbContext context;
         protected Brand currentBrand;
+        protected Guid providerId;
         protected HtmlDocument doc;
         protected HtmlNode DNode => doc.DocumentNode;
         protected List<string> total = new List<string>();
 
-        public AbsProvider(AppDbContext context)
+        public BaseProvider(AppDbContext context)
         {
             this.context = context;
             models = context.Models.Include(u => u.Brand).ToList();
