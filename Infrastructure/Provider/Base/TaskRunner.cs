@@ -24,8 +24,9 @@ namespace Infrastructure.Provider.Base
 
         private void DoWork(object state)
         {
-            _logger.LogInformation("DoWork");
+            _logger.LogInformation("Task Start");
             new AutokladUa(_db, _logger).Run();
+            new TemanComUa(_db, _logger).Run();
         }
 
         public Task StartAsync(CancellationToken stoppingToken)

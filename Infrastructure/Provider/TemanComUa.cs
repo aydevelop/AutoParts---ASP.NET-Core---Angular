@@ -11,21 +11,21 @@ using System.Threading;
 
 namespace Infrastructure.Provider
 {
-    public class AutokladUa : BaseProvider
+    public class TemanComUa : BaseProvider
     {
-        private readonly string host = "https://www.autoklad.ua";
+        private readonly string host = "https://teman.com.ua";
         private readonly ILogger<TaskRunner> _logger;
 
-        public AutokladUa(AppDbContext db, ILogger<TaskRunner> logger) : base(db)
+        public TemanComUa(AppDbContext db, ILogger<TaskRunner> logger) : base(db)
         {
             this._logger = logger;
         }
 
         List<ItemProvider> providers = new List<ItemProvider>()
         {
-            new ItemProvider() { brand = EnumBrand.Audi, url = "https://www.autoklad.ua/cars/audi/" },
-            new ItemProvider() { brand = EnumBrand.BMW, url = "https://www.autoklad.ua/cars/bmw/" },
-            new ItemProvider() { brand = EnumBrand.Mercedes, url = "https://www.autoklad.ua/cars/mercedes/" },
+            new ItemProvider() { brand = EnumBrand.Audi, url = "https://teman.com.ua/cars/audi" },
+            new ItemProvider() { brand = EnumBrand.BMW, url = "https://teman.com.ua/cars/bmw" },
+            new ItemProvider() { brand = EnumBrand.Mercedes, url = "https://teman.com.ua/cars/mercedesbenz" },
         };
 
         public override void Run()
@@ -56,13 +56,13 @@ namespace Infrastructure.Provider
         public void Step1(ItemProvider item)
         {
             DocLoad(item.url);
-            var links = DNode.SelectNodes("//div[@class='uk-container o-text-formatted']//a");
+            var links = DNode.SelectNodes("//td[@class='cell-brand']//a");
 
             foreach (HtmlNode link in links)
             {
                 string url = host + link.Attributes["href"].Value;
-                string model = link.InnerText.Replace("Запчасти на", "");
-                model = model.Substring(currentBrand.Name.Length + 1).Trim();
+                string model = link.InnerText.Trim().Trim('/');
+
                 try
                 {
                     Step2(url, model);
@@ -75,16 +75,15 @@ namespace Infrastructure.Provider
             }
         }
 
-        public void Step2(string url, string model)
+        private void Step2(string url, string model)
         {
             DocLoad(url);
-            var links = DNode.SelectNodes("//div[@class='uk-container o-text-formatted']//a");
+            var links = DNode.SelectNodes("//a[@class='caption-element-a']");
 
             foreach (HtmlNode link in links)
             {
                 string urlItem = host + link.Attributes["href"].Value;
-                string category = link.InnerText.Split(new[] { " на " }, StringSplitOptions.None)[0];
-
+                string category = link.InnerText;
 
                 try
                 {
@@ -98,46 +97,51 @@ namespace Infrastructure.Provider
             }
         }
 
-        public void Step3(string url, string model, string category)
+        private void Step3(string url, string model, string category)
         {
             Console.WriteLine(url);
             Model checkModel = AddModelIfNotExist(model);
             Category checkCategory = AddCategoryIfNotExist(category);
 
-            DocLoad(url);
-            var links = DNode.SelectNodes("//div[@class='o-product o-product-special  ']//a").Take(10);
-
-            foreach (var link in links)
+            var categories = DNode.SelectNodes("//div[@class='tem-category-list']//div[@class='caption']//a");
+            foreach (HtmlNode item in categories)
             {
-                string test = host + null;
-                string urlItem = host + link.Attributes["href"]?.Value;
-                if (!total.Contains(urlItem) && !urlItem.Contains("javascript") && urlItem != host)
+                url = host + item.Attributes["href"].Value;
+                DocLoad(url);
+                var subCategories = DNode.SelectNodes("//div[@class='tem-category-list']/div/div/a");
+
+                foreach (HtmlNode subItem in subCategories)
                 {
-                    total.Add(urlItem);
-                    Console.WriteLine("\t" + urlItem);
-                    try
-                    {
-                        Step4(urlItem, checkModel, checkCategory);
-                    }
-                    catch (Exception ex)
-                    {
-                        Thread.Sleep(500);
-                        _logger.LogError(ex.Message);
-                    }
+                    url = host + subItem.Attributes["href"].Value;
+                    Step4(url, checkModel, checkCategory);
                 }
             }
         }
 
-        public void Step4(string url, Model model, Category category)
+        private void Step4(string url, Model checkModel, Category checkCategory)
         {
-            Thread.Sleep(1000);
+            Console.WriteLine("\t" + url);
+            DocLoad(url);
+            var products = DNode.SelectNodes("//div[@class='tgp-product-element']//div[@class='name']//a").Take(5);
+
+            foreach (HtmlNode item in products)
+            {
+                url = host + item.Attributes["href"].Value;
+                Step5(url, checkModel, checkCategory);
+            }
+        }
+
+        private void Step5(string url, Model model, Category category)
+        {
+            Console.WriteLine("\t\t" + url);
+            Thread.Sleep(500);
             DocLoad(url);
 
-            string name = GetText("//h1[@class='o-section-title o-head-title']");
-            string price = GetText("//*[@class='o-price-code']/strong").Replace("грн", "");
-            var link = DNode.SelectSingleNode("//div[@class='uk-width-1-1 o-card-img']//a");
-            string image = link.Attributes["href"].Value;
-            string description = GetText("//div[@class='uk-card uk-card-body uk-card-default uk-card-bodyh']");
+            string name = GetText("//h1[@class='tgp-product-title']/span");
+            string price = GetText("//div[@class='price']").Split(' ')[0];
+            var link = DNode.SelectSingleNode("//div[@class='product-image']//img");
+            string image = link.Attributes["data-src"].Value;
+            string description = GetText("//div[@class='inner-description']");
 
             Spare spare = new Spare();
             spare.Name = name;

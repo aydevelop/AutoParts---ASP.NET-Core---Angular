@@ -65,5 +65,21 @@ namespace Infrastructure.Provider.Base
         {
             return HttpUtility.HtmlDecode(DNode.SelectSingleNode(path)?.InnerText?.Trim()) ?? "";
         }
+
+        public void CheckProvider(string host)
+        {
+            var checkProvider = context.Providers.FirstOrDefault(q => q.SiteUrl == host);
+            if (checkProvider == null)
+            {
+                Database.Model.Provider pr = new Database.Model.Provider() { Name = host, SiteUrl = host };
+                context.Providers.Add(pr);
+                providerId = pr.Id;
+            }
+            else
+            {
+                providerId = checkProvider.Id;
+            }
+        }
+
     }
 }
