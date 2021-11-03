@@ -11,21 +11,21 @@ using System.Threading;
 
 namespace Infrastructure.Provider
 {
-    public class AutokladUa : BaseProvider
+    public class AvtozoomComUa : BaseProvider
     {
-        private readonly string host = "https://www.autoklad.ua";
+        private readonly string host = "https://autocompass.com.ua";
         private readonly ILogger<TaskRunner> _logger;
 
-        public AutokladUa(AppDbContext db, ILogger<TaskRunner> logger) : base(db)
+        public AvtozoomComUa(AppDbContext db, ILogger<TaskRunner> logger) : base(db)
         {
             this._logger = logger;
         }
 
         List<ItemProvider> providers = new List<ItemProvider>()
         {
-            new ItemProvider() { brand = EnumBrand.Audi, url = "https://www.autoklad.ua/cars/audi/" },
-            new ItemProvider() { brand = EnumBrand.BMW, url = "https://www.autoklad.ua/cars/bmw/" },
-            new ItemProvider() { brand = EnumBrand.Mercedes, url = "https://www.autoklad.ua/cars/mercedes/" },
+            new ItemProvider() { brand = EnumBrand.Audi, url = "https://autocompass.com.ua/audi" },
+            new ItemProvider() { brand = EnumBrand.BMW, url = "https://autocompass.com.ua/bmw" },
+            new ItemProvider() { brand = EnumBrand.Mercedes, url = "https://autocompass.com.ua/mercedes" },
         };
 
         public override void Run()
@@ -53,16 +53,16 @@ namespace Infrastructure.Provider
         public void Step1(ItemProvider item)
         {
             DocLoad(item.url);
-            var links = DNode.SelectNodes("//div[@class='uk-container o-text-formatted']//a");
+            var models = DNode.SelectNodes("//div[@class='container-white']//a[@class='title-item']");
 
-            foreach (HtmlNode link in links)
+            foreach (HtmlNode model in models)
             {
-                string url = host + link.Attributes["href"].Value;
-                string model = link.InnerText.Replace("Запчасти на", "");
-                model = model.Substring(currentBrand.Name.Length + 1).Trim();
+                string modelUrl = host + model.Attributes["href"].Value;
+                string modelName = model.ChildNodes[^2].InnerText;
+
                 try
                 {
-                    Step2(url, model);
+                    Step2(modelUrl, modelName);
                 }
                 catch (Exception ex)
                 {
@@ -75,17 +75,16 @@ namespace Infrastructure.Provider
         public void Step2(string url, string model)
         {
             DocLoad(url);
-            var links = DNode.SelectNodes("//div[@class='uk-container o-text-formatted']//a");
+            var categories = DNode.SelectNodes("//div[@class='wrap-cat-row']//span[@class='h3']//a");
 
-            foreach (HtmlNode link in links)
+            foreach (HtmlNode category in categories)
             {
-                string urlItem = host + link.Attributes["href"].Value;
-                string category = link.InnerText.Split(new[] { " на " }, StringSplitOptions.None)[0];
-
+                string categoryUrl = host + category.Attributes["href"].Value;
+                string categoryName = category.InnerText.Trim();
 
                 try
                 {
-                    Step3(urlItem, model, category);
+                    Step3(categoryUrl, model, categoryName);
                 }
                 catch (Exception ex)
                 {
@@ -95,26 +94,25 @@ namespace Infrastructure.Provider
             }
         }
 
-        public void Step3(string url, string model, string category)
+        private void Step3(string categoryUrl, string model, string category)
         {
-            Console.WriteLine(url);
+            Console.WriteLine(categoryUrl);
             Model checkModel = AddModelIfNotExist(model);
             Category checkCategory = AddCategoryIfNotExist(category);
 
-            DocLoad(url);
-            var links = DNode.SelectNodes("//div[@class='o-product o-product-special  ']//a").Take(limit);
+            DocLoad(categoryUrl);
+            var products = DNode.SelectNodes("//div[@class='product-name']//a").Take(limit);
 
-            foreach (var link in links)
+            foreach (var product in products)
             {
-                string test = host + null;
-                string urlItem = host + link.Attributes["href"]?.Value;
-                if (!total.Contains(urlItem) && !urlItem.Contains("javascript") && urlItem != host)
+                string productUrl = product.Attributes["href"]?.Value;
+                if (!total.Contains(productUrl))
                 {
-                    total.Add(urlItem);
-                    Console.WriteLine("\t" + urlItem);
+                    Console.WriteLine("\t" + productUrl);
+
                     try
                     {
-                        Step4(urlItem, checkModel, checkCategory);
+                        Step4(productUrl, checkModel, checkCategory);
                     }
                     catch (Exception ex)
                     {
@@ -125,16 +123,26 @@ namespace Infrastructure.Provider
             }
         }
 
-        public void Step4(string url, Model model, Category category)
+        private void Step4(string productUrl, Model model, Category category)
         {
             Thread.Sleep(1000);
-            DocLoad(url);
+            DocLoad(productUrl);
 
-            string name = GetText("//h1[@class='o-section-title o-head-title']");
-            string price = GetText("//*[@class='o-price-code']/strong").Replace("грн", "");
-            var link = DNode.SelectSingleNode("//div[@class='uk-width-1-1 o-card-img']//a");
-            string image = link.Attributes["href"].Value;
-            string description = GetText("//div[@class='uk-card uk-card-body uk-card-default uk-card-bodyh']");
+            string name = GetText("//h1[@class='title-item']");
+            string price = GetText("//*[@class='price-val']");
+            var link = DNode.SelectSingleNode("//div[@id='gal-imags-first']//img");
+            string image = link.Attributes["src"].Value;
+
+            var dts = DNode.SelectNodes("//dl[@class='dl-horizontal dl-criteria m-no ']/dt");
+            var dds = DNode.SelectNodes("//dl[@class='dl-horizontal dl-criteria m-no ']/dd");
+
+            string description = "";
+            for (int i = 0; i < dts.Count && i < dds.Count; i++)
+            {
+                var tableName = dts[i].InnerText.Trim();
+                var tableValue = dds[i].InnerText.Trim();
+                description += $"{tableName}: ${tableValue}" + Environment.NewLine;
+            }
 
             Spare spare = new Spare();
             spare.Name = name;
@@ -143,7 +151,7 @@ namespace Infrastructure.Provider
             spare.Description = description;
             spare.CategoryId = category.Id;
             spare.ModelId = model.Id;
-            spare.Url = url;
+            spare.Url = productUrl;
             spare.ProviderId = providerId;
 
             context.Spares.Add(spare);

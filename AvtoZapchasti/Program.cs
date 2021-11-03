@@ -40,6 +40,7 @@ namespace AvtoZapchasti
 
                 //new AutokladUa(db, taskLogger).Run();
                 //new TemanComUa(db, taskLogger).Run();
+                //new AvtozoomComUa(db, taskLogger).Run();
             }
             catch (Exception ex)
             {

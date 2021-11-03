@@ -35,9 +35,6 @@ namespace Infrastructure.Provider
 
             try
             {
-                context.Spares.RemoveRange(context.Spares.Where(q => q.ProviderId == providerId));
-                context.SaveChanges();
-
                 foreach (var item in providers)
                 {
                     currentBrand = brands.Find(b => b.Name == item.brand.ToString());
@@ -122,7 +119,7 @@ namespace Infrastructure.Provider
         {
             Console.WriteLine("\t" + url);
             DocLoad(url);
-            var products = DNode.SelectNodes("//div[@class='tgp-product-element']//div[@class='name']//a").Take(5);
+            var products = DNode.SelectNodes("//div[@class='tgp-product-element']//div[@class='name']//a").Take(limit);
 
             foreach (HtmlNode item in products)
             {

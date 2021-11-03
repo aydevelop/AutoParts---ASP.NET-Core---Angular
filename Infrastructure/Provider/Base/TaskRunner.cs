@@ -27,6 +27,7 @@ namespace Infrastructure.Provider.Base
             _logger.LogInformation("Task Start");
             new AutokladUa(_db, _logger).Run();
             new TemanComUa(_db, _logger).Run();
+            new AvtozoomComUa(_db, _logger).Run();
         }
 
         public Task StartAsync(CancellationToken stoppingToken)

@@ -20,6 +20,7 @@ namespace Infrastructure.Provider.Base
         protected HtmlDocument doc;
         protected HtmlNode DNode => doc.DocumentNode;
         protected List<string> total = new List<string>();
+        protected int limit = 10;
 
         public BaseProvider(AppDbContext context)
         {
@@ -40,7 +41,7 @@ namespace Infrastructure.Provider.Base
 
         public Model AddModelIfNotExist(string model)
         {
-            Model checkModel = models.Find(q => q.Name == model && q.Brand.Name == currentBrand.Name);
+            Model checkModel = models.Find(q => q.Name.ToLower() == model.ToLower() && q.Brand.Name == currentBrand.Name);
             if (checkModel == null)
             {
                 checkModel = context.Models.Add(new Model() { Name = model, BrandId = currentBrand.Id }).Entity;
@@ -52,7 +53,7 @@ namespace Infrastructure.Provider.Base
 
         public Category AddCategoryIfNotExist(string category)
         {
-            Category checkCategory = categories.Find(q => q.Name == category);
+            Category checkCategory = categories.Find(q => q.Name.ToLower() == category.ToLower());
             if (checkCategory == null)
             {
                 checkCategory = context.Categories.Add(new Category() { Name = category }).Entity;
@@ -79,7 +80,9 @@ namespace Infrastructure.Provider.Base
             {
                 providerId = checkProvider.Id;
             }
-        }
 
+            context.Spares.RemoveRange(context.Spares.Where(q => q.ProviderId == providerId));
+            context.SaveChanges();
+        }
     }
 }
