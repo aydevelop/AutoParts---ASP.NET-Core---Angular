@@ -2,7 +2,7 @@
 
 namespace AvtoZapchasti.Extension
 {
-    public static class ApplicationPolicyExtensions
+    public static class PolicyServiceExtensions
     {
         public static IServiceCollection AddPolicyServices(this IServiceCollection services)
         {

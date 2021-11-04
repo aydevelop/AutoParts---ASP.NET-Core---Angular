@@ -7,6 +7,7 @@ using FluentValidation.AspNetCore;
 using Infrastructure.Util;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.IdentityModel.Tokens.Jwt;
@@ -30,7 +31,7 @@ namespace AvtoZapchasti
                 .AddJsonOptions(options =>
                     options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull);
 
-            //services.AddHostedService<TaskRunner>();
+            services.AddDbContext<AppDbContext>(q => q.UseSqlServer(Configuration.GetConnectionString("DefConnection")));
             services.AddApplicationServices(Configuration);
             services.AddTokenAuthentication(Configuration["keyjwt"]);
             services.AddSwaggerDocumentation();
@@ -41,6 +42,7 @@ namespace AvtoZapchasti
             services.AddTransient<ICategoryRepository, CategoryRepository>();
             services.AddTransient<ISpareRepository, SpareRepository>();
             services.AddAutoMapper(typeof(AutoMapperConfig));
+            //services.AddHostedService<TaskRunner>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, AppDbContext dbContext)

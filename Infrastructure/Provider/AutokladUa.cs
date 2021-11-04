@@ -13,34 +13,33 @@ namespace Infrastructure.Provider
 {
     public class AutokladUa : BaseProvider
     {
-        private readonly string host = "https://www.autoklad.ua";
+        private readonly string _host = "";
         private readonly ILogger<TaskRunner> _logger;
+        private List<ItemProvider> _providers = new List<ItemProvider>();
 
-        public AutokladUa(AppDbContext db, ILogger<TaskRunner> logger) : base(db)
+        public AutokladUa(AppDbContext db, ILogger<TaskRunner> logger, string host) : base(db)
         {
             this._logger = logger;
-        }
+            this._host = host;
 
-        List<ItemProvider> providers = new List<ItemProvider>()
-        {
-            new ItemProvider() { brand = EnumBrand.Audi, url = "https://www.autoklad.ua/cars/audi/" },
-            new ItemProvider() { brand = EnumBrand.BMW, url = "https://www.autoklad.ua/cars/bmw/" },
-            new ItemProvider() { brand = EnumBrand.Mercedes, url = "https://www.autoklad.ua/cars/mercedes/" },
-        };
+            _providers.Add(new ItemProvider() { brand = EnumBrand.Audi, url = _host + "/cars/audi/" });
+            _providers.Add(new ItemProvider() { brand = EnumBrand.Audi, url = _host + "/cars/bmw/" });
+            _providers.Add(new ItemProvider() { brand = EnumBrand.Audi, url = _host + "/cars/mercedes/" });
+        }
 
         public override void Run()
         {
-            _logger.LogInformation($"Start {host}");
-            CheckProvider(host);
+            _logger.LogInformation($"Start {_host}");
+            CheckProvider(_host);
 
             try
             {
-                foreach (var item in providers)
+                foreach (var item in _providers)
                 {
                     currentBrand = brands.Find(b => b.Name == item.brand.ToString());
                     if (currentBrand != null)
                     {
-                        Step1(item);
+                        Start(item);
                     }
                 }
             }
@@ -50,19 +49,19 @@ namespace Infrastructure.Provider
             }
         }
 
-        public void Step1(ItemProvider item)
+        public void Start(ItemProvider item)
         {
             DocLoad(item.url);
             var links = DNode.SelectNodes("//div[@class='uk-container o-text-formatted']//a");
 
             foreach (HtmlNode link in links)
             {
-                string url = host + link.Attributes["href"].Value;
+                string url = _host + link.Attributes["href"].Value;
                 string model = link.InnerText.Replace("Запчасти на", "");
                 model = model.Substring(currentBrand.Name.Length + 1).Trim();
                 try
                 {
-                    Step2(url, model);
+                    GetCategory(url, model);
                 }
                 catch (Exception ex)
                 {
@@ -72,20 +71,19 @@ namespace Infrastructure.Provider
             }
         }
 
-        public void Step2(string url, string model)
+        public void GetCategory(string url, string model)
         {
             DocLoad(url);
-            var links = DNode.SelectNodes("//div[@class='uk-container o-text-formatted']//a");
+            var categories = DNode.SelectNodes("//div[@class='uk-container o-text-formatted']//a");
 
-            foreach (HtmlNode link in links)
+            foreach (HtmlNode categoryItem in categories)
             {
-                string urlItem = host + link.Attributes["href"].Value;
-                string category = link.InnerText.Split(new[] { " на " }, StringSplitOptions.None)[0];
-
+                string urlItem = _host + categoryItem.Attributes["href"].Value;
+                string category = categoryItem.InnerText.Split(new[] { " на " }, StringSplitOptions.None)[0];
 
                 try
                 {
-                    Step3(urlItem, model, category);
+                    CheckInfo(urlItem, model, category);
                 }
                 catch (Exception ex)
                 {
@@ -95,26 +93,26 @@ namespace Infrastructure.Provider
             }
         }
 
-        public void Step3(string url, string model, string category)
+        public void CheckInfo(string url, string model, string category)
         {
             Console.WriteLine(url);
             Model checkModel = AddModelIfNotExist(model);
             Category checkCategory = AddCategoryIfNotExist(category);
 
             DocLoad(url);
-            var links = DNode.SelectNodes("//div[@class='o-product o-product-special  ']//a").Take(limit);
+            var products = DNode.SelectNodes("//div[@class='o-product o-product-special  ']//a").Take(limit);
 
-            foreach (var link in links)
+            foreach (var product in products)
             {
-                string test = host + null;
-                string urlItem = host + link.Attributes["href"]?.Value;
-                if (!total.Contains(urlItem) && !urlItem.Contains("javascript") && urlItem != host)
+                string test = _host + null;
+                string urlItem = _host + product.Attributes["href"]?.Value;
+                if (!total.Contains(urlItem) && !urlItem.Contains("javascript") && urlItem != _host)
                 {
                     total.Add(urlItem);
                     Console.WriteLine("\t" + urlItem);
                     try
                     {
-                        Step4(urlItem, checkModel, checkCategory);
+                        GetProduct(urlItem, checkModel, checkCategory);
                     }
                     catch (Exception ex)
                     {
@@ -125,7 +123,7 @@ namespace Infrastructure.Provider
             }
         }
 
-        public void Step4(string url, Model model, Category category)
+        public void GetProduct(string url, Model model, Category category)
         {
             Thread.Sleep(1000);
             DocLoad(url);

@@ -13,34 +13,33 @@ namespace Infrastructure.Provider
 {
     public class AvtozoomComUa : BaseProvider
     {
-        private readonly string host = "https://autocompass.com.ua";
+        private readonly string _host = "";
         private readonly ILogger<TaskRunner> _logger;
+        private List<ItemProvider> _providers = new List<ItemProvider>();
 
-        public AvtozoomComUa(AppDbContext db, ILogger<TaskRunner> logger) : base(db)
+        public AvtozoomComUa(AppDbContext db, ILogger<TaskRunner> logger, string host) : base(db)
         {
             this._logger = logger;
-        }
+            this._host = host;
 
-        List<ItemProvider> providers = new List<ItemProvider>()
-        {
-            new ItemProvider() { brand = EnumBrand.Audi, url = "https://autocompass.com.ua/audi" },
-            new ItemProvider() { brand = EnumBrand.BMW, url = "https://autocompass.com.ua/bmw" },
-            new ItemProvider() { brand = EnumBrand.Mercedes, url = "https://autocompass.com.ua/mercedes" },
-        };
+            _providers.Add(new ItemProvider() { brand = EnumBrand.Audi, url = _host + "/audi" });
+            _providers.Add(new ItemProvider() { brand = EnumBrand.BMW, url = _host + "/bmw" });
+            _providers.Add(new ItemProvider() { brand = EnumBrand.Mercedes, url = _host + "/mercedes" });
+        }
 
         public override void Run()
         {
-            _logger.LogInformation($"Start {host}");
-            CheckProvider(host);
+            _logger.LogInformation($"Start {_host}");
+            CheckProvider(_host);
 
             try
             {
-                foreach (var item in providers)
+                foreach (var item in _providers)
                 {
                     currentBrand = brands.Find(b => b.Name == item.brand.ToString());
                     if (currentBrand != null)
                     {
-                        Step1(item);
+                        Start(item);
                     }
                 }
             }
@@ -50,19 +49,19 @@ namespace Infrastructure.Provider
             }
         }
 
-        public void Step1(ItemProvider item)
+        public void Start(ItemProvider item)
         {
             DocLoad(item.url);
             var models = DNode.SelectNodes("//div[@class='container-white']//a[@class='title-item']");
 
             foreach (HtmlNode model in models)
             {
-                string modelUrl = host + model.Attributes["href"].Value;
+                string modelUrl = _host + model.Attributes["href"].Value;
                 string modelName = model.ChildNodes[^2].InnerText;
 
                 try
                 {
-                    Step2(modelUrl, modelName);
+                    GetCategory(modelUrl, modelName);
                 }
                 catch (Exception ex)
                 {
@@ -72,19 +71,19 @@ namespace Infrastructure.Provider
             }
         }
 
-        public void Step2(string url, string model)
+        public void GetCategory(string url, string model)
         {
             DocLoad(url);
             var categories = DNode.SelectNodes("//div[@class='wrap-cat-row']//span[@class='h3']//a");
 
             foreach (HtmlNode category in categories)
             {
-                string categoryUrl = host + category.Attributes["href"].Value;
+                string categoryUrl = _host + category.Attributes["href"].Value;
                 string categoryName = category.InnerText.Trim();
 
                 try
                 {
-                    Step3(categoryUrl, model, categoryName);
+                    CheckInfo(categoryUrl, model, categoryName);
                 }
                 catch (Exception ex)
                 {
@@ -94,7 +93,7 @@ namespace Infrastructure.Provider
             }
         }
 
-        private void Step3(string categoryUrl, string model, string category)
+        private void CheckInfo(string categoryUrl, string model, string category)
         {
             Console.WriteLine(categoryUrl);
             Model checkModel = AddModelIfNotExist(model);
@@ -112,7 +111,7 @@ namespace Infrastructure.Provider
 
                     try
                     {
-                        Step4(productUrl, checkModel, checkCategory);
+                        GetProduct(productUrl, checkModel, checkCategory);
                     }
                     catch (Exception ex)
                     {
@@ -123,7 +122,7 @@ namespace Infrastructure.Provider
             }
         }
 
-        private void Step4(string productUrl, Model model, Category category)
+        private void GetProduct(string productUrl, Model model, Category category)
         {
             Thread.Sleep(1000);
             DocLoad(productUrl);

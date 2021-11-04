@@ -18,17 +18,17 @@ namespace AvtoZapchasti.Controllers
 {
     public class AuthController : BaseController
     {
-        private readonly UserManager<AppUser> userManager;
-        private readonly SignInManager<AppUser> signInManager;
-        private readonly IConfiguration configuration;
-        private readonly IMapper mapper;
+        private readonly UserManager<AppUser> _userManager;
+        private readonly SignInManager<AppUser> _signInManager;
+        private readonly IConfiguration _configuration;
+        private readonly IMapper _mapper;
 
         public AuthController(AppDbContext db, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IConfiguration configuration, IMapper mapper)
         {
-            this.userManager = userManager;
-            this.signInManager = signInManager;
-            this.configuration = configuration;
-            this.mapper = mapper;
+            _userManager = userManager;
+            _signInManager = signInManager;
+            _configuration = configuration;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -41,11 +41,11 @@ namespace AvtoZapchasti.Controllers
         public async Task<ActionResult<AuthResponse>> RegisterAsync([FromBody] UserRegisterAction userRegisterAction)
         {
             var user = new AppUser { UserName = userRegisterAction.UserName, Email = userRegisterAction.Email };
-            var result = await userManager.CreateAsync(user, userRegisterAction.Password);
+            var result = await _userManager.CreateAsync(user, userRegisterAction.Password);
 
             if (result.Succeeded)
             {
-                return await userManager.GetTokenAsync<AppUser>(user.Email, configuration["keyjwt"]);
+                return await _userManager.GetTokenAsync<AppUser>(user.Email, _configuration["keyjwt"]);
             }
             else
             {
@@ -56,16 +56,16 @@ namespace AvtoZapchasti.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<AuthResponse>> Login([FromBody] UserLoginAction userLoginAction)
         {
-            var user = await userManager.FindByEmailAsync(userLoginAction.Email);
+            var user = await _userManager.FindByEmailAsync(userLoginAction.Email);
             if (user == null)
             {
                 return BadRequest(Error(new[] { "Incorrect Login" }));
             }
 
-            var result = await signInManager.PasswordSignInAsync(user, userLoginAction.Password, true, false);
+            var result = await _signInManager.PasswordSignInAsync(user, userLoginAction.Password, true, false);
             if (result.Succeeded)
             {
-                return await userManager.GetTokenAsync<AppUser>(userLoginAction.Email, configuration["keyjwt"]);
+                return await _userManager.GetTokenAsync<AppUser>(userLoginAction.Email, _configuration["keyjwt"]);
             }
             else
             {
@@ -80,8 +80,8 @@ namespace AvtoZapchasti.Controllers
             var email = HttpContext.User.FindFirst("email")?.Value;
             if (email == null) { return new UserResponse(); }
 
-            var me = await userManager.FindByEmailAsync(email);
-            var result = mapper.Map<AppUser, UserResponse>(me);
+            var me = await _userManager.FindByEmailAsync(email);
+            var result = _mapper.Map<AppUser, UserResponse>(me);
 
             return result;
         }

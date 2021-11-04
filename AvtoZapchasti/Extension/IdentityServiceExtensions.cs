@@ -1,4 +1,6 @@
-﻿using Infrastructure.Error;
+﻿using Database;
+using Database.Model;
+using Infrastructure.Error;
 using Infrastructure.Response.Auth;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
@@ -15,10 +17,15 @@ using System.Threading.Tasks;
 
 namespace AvtoZapchasti.Extension
 {
-    public static class TokenAuthExtension
+    public static class IdentityServiceExtensions
     {
         public static IServiceCollection AddTokenAuthentication(this IServiceCollection services, String keyjwt)
         {
+            services.AddIdentity<AppUser, IdentityRole>(options =>
+            {
+                options.User.RequireUniqueEmail = true;
+            }).AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
+
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
             {
                 options.TokenValidationParameters = new TokenValidationParameters

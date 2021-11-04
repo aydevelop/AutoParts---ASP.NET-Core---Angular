@@ -1,5 +1,6 @@
 using Database;
 using Database.Model;
+using Infrastructure.Provider;
 using Infrastructure.Provider.Base;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -25,7 +26,7 @@ namespace AvtoZapchasti
             var db = services.GetRequiredService<AppDbContext>();
             var logger = services.GetRequiredService<ILogger<Program>>();
             var loggerFactory = services.GetRequiredService<ILoggerFactory>();
-            var config = services.GetRequiredService<IConfiguration>();
+            IConfiguration config = services.GetRequiredService<IConfiguration>();
             loggerFactory.AddFile(Path.Combine($"{Directory.GetCurrentDirectory()}", config["logfile"]));
 
             var taskLogger = services.GetRequiredService<ILogger<TaskRunner>>();
@@ -38,9 +39,10 @@ namespace AvtoZapchasti
                 await DbSeed.SeedAsync(db, userManager);
                 logger.LogInformation("Migration completed");
 
-                //new AutokladUa(db, taskLogger).Run();
-                //new TemanComUa(db, taskLogger).Run();
-                //new AvtozoomComUa(db, taskLogger).Run();
+                var section = config.GetSection("Providers");
+                new AutokladUa(db, taskLogger, section["Autoklad"]).Run();
+                new TemanComUa(db, taskLogger, section["Teman"]).Run();
+                new AvtozoomComUa(db, taskLogger, section["Avtozoom"]).Run();
             }
             catch (Exception ex)
             {

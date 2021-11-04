@@ -1,7 +1,6 @@
 ﻿using AvtoZapchasti.Controllers.Base;
 using Database.Contract;
 using Database.Model;
-using Database.Repository;
 
 namespace AvtoZapchasti.Controllers
 {

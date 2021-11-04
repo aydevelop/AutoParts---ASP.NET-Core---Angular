@@ -13,34 +13,33 @@ namespace Infrastructure.Provider
 {
     public class TemanComUa : BaseProvider
     {
-        private readonly string host = "https://teman.com.ua";
+        private readonly string _host = "";
         private readonly ILogger<TaskRunner> _logger;
+        private List<ItemProvider> _providers = new List<ItemProvider>();
 
-        public TemanComUa(AppDbContext db, ILogger<TaskRunner> logger) : base(db)
+        public TemanComUa(AppDbContext db, ILogger<TaskRunner> logger, string host) : base(db)
         {
             this._logger = logger;
-        }
+            this._host = host;
 
-        List<ItemProvider> providers = new List<ItemProvider>()
-        {
-            new ItemProvider() { brand = EnumBrand.Audi, url = "https://teman.com.ua/cars/audi" },
-            new ItemProvider() { brand = EnumBrand.BMW, url = "https://teman.com.ua/cars/bmw" },
-            new ItemProvider() { brand = EnumBrand.Mercedes, url = "https://teman.com.ua/cars/mercedesbenz" },
-        };
+            _providers.Add(new ItemProvider() { brand = EnumBrand.Audi, url = _host + "/cars/audi/" });
+            _providers.Add(new ItemProvider() { brand = EnumBrand.Audi, url = _host + "/cars/bmw/" });
+            _providers.Add(new ItemProvider() { brand = EnumBrand.Audi, url = _host + "/cars/mercedesbenz" });
+        }
 
         public override void Run()
         {
-            _logger.LogInformation($"Start {host}");
-            CheckProvider(host);
+            _logger.LogInformation($"Start {_host}");
+            CheckProvider(_host);
 
             try
             {
-                foreach (var item in providers)
+                foreach (var item in _providers)
                 {
                     currentBrand = brands.Find(b => b.Name == item.brand.ToString());
                     if (currentBrand != null)
                     {
-                        Step1(item);
+                        Start(item);
                     }
                 }
             }
@@ -50,19 +49,19 @@ namespace Infrastructure.Provider
             }
         }
 
-        public void Step1(ItemProvider item)
+        public void Start(ItemProvider item)
         {
             DocLoad(item.url);
-            var links = DNode.SelectNodes("//td[@class='cell-brand']//a");
+            var models = DNode.SelectNodes("//td[@class='cell-brand']//a");
 
-            foreach (HtmlNode link in links)
+            foreach (HtmlNode modelItem in models)
             {
-                string url = host + link.Attributes["href"].Value;
-                string model = link.InnerText.Trim().Trim('/');
+                string url = _host + modelItem.Attributes["href"].Value;
+                string model = modelItem.InnerText.Trim().Trim('/');
 
                 try
                 {
-                    Step2(url, model);
+                    GetCategory(url, model);
                 }
                 catch (Exception ex)
                 {
@@ -72,19 +71,19 @@ namespace Infrastructure.Provider
             }
         }
 
-        private void Step2(string url, string model)
+        private void GetCategory(string url, string model)
         {
             DocLoad(url);
             var links = DNode.SelectNodes("//a[@class='caption-element-a']");
 
             foreach (HtmlNode link in links)
             {
-                string urlItem = host + link.Attributes["href"].Value;
+                string urlItem = _host + link.Attributes["href"].Value;
                 string category = link.InnerText;
 
                 try
                 {
-                    Step3(urlItem, model, category);
+                    CheckInfo(urlItem, model, category);
                 }
                 catch (Exception ex)
                 {
@@ -94,7 +93,7 @@ namespace Infrastructure.Provider
             }
         }
 
-        private void Step3(string url, string model, string category)
+        private void CheckInfo(string url, string model, string category)
         {
             Console.WriteLine(url);
             Model checkModel = AddModelIfNotExist(model);
@@ -103,32 +102,32 @@ namespace Infrastructure.Provider
             var categories = DNode.SelectNodes("//div[@class='tem-category-list']//div[@class='caption']//a");
             foreach (HtmlNode item in categories)
             {
-                url = host + item.Attributes["href"].Value;
+                url = _host + item.Attributes["href"].Value;
                 DocLoad(url);
                 var subCategories = DNode.SelectNodes("//div[@class='tem-category-list']/div/div/a");
 
-                foreach (HtmlNode subItem in subCategories)
+                foreach (HtmlNode subCategory in subCategories)
                 {
-                    url = host + subItem.Attributes["href"].Value;
-                    Step4(url, checkModel, checkCategory);
+                    url = _host + subCategory.Attributes["href"].Value;
+                    GetSubCategory(url, checkModel, checkCategory);
                 }
             }
         }
 
-        private void Step4(string url, Model checkModel, Category checkCategory)
+        private void GetSubCategory(string url, Model checkModel, Category checkCategory)
         {
             Console.WriteLine("\t" + url);
             DocLoad(url);
             var products = DNode.SelectNodes("//div[@class='tgp-product-element']//div[@class='name']//a").Take(limit);
 
-            foreach (HtmlNode item in products)
+            foreach (HtmlNode product in products)
             {
-                url = host + item.Attributes["href"].Value;
-                Step5(url, checkModel, checkCategory);
+                url = _host + product.Attributes["href"].Value;
+                GetProduct(url, checkModel, checkCategory);
             }
         }
 
-        private void Step5(string url, Model model, Category category)
+        private void GetProduct(string url, Model model, Category category)
         {
             Console.WriteLine("\t\t" + url);
             Thread.Sleep(500);
