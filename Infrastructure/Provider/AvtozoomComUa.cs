@@ -11,13 +11,13 @@ using System.Threading;
 
 namespace Infrastructure.Provider
 {
-    public class AvtozoomComUa : BaseProvider
+    public class AutocompassComUa : BaseProvider
     {
         private readonly string _host = "";
         private readonly ILogger<TaskRunner> _logger;
         private List<ItemProvider> _providers = new List<ItemProvider>();
 
-        public AvtozoomComUa(AppDbContext db, ILogger<TaskRunner> logger, string host) : base(db)
+        public AutocompassComUa(AppDbContext db, ILogger<TaskRunner> logger, string host) : base(db)
         {
             this._logger = logger;
             this._host = host;

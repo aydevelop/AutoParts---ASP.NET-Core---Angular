@@ -1,6 +1,5 @@
 using Database;
 using Database.Model;
-using Infrastructure.Provider;
 using Infrastructure.Provider.Base;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -40,9 +39,9 @@ namespace AvtoZapchasti
                 logger.LogInformation("Migration completed");
 
                 var section = config.GetSection("Providers");
-                new AutokladUa(db, taskLogger, section["Autoklad"]).Run();
-                new TemanComUa(db, taskLogger, section["Teman"]).Run();
-                new AvtozoomComUa(db, taskLogger, section["Avtozoom"]).Run();
+                //new AutokladUa(db, taskLogger, section["Autoklad"]).Run();
+                //new TemanComUa(db, taskLogger, section["Teman"]).Run();
+                //new AutocompassComUa(db, taskLogger, section["Autocompass"]).Run();
             }
             catch (Exception ex)
             {

@@ -34,20 +34,20 @@ namespace AvtoZapchasti.Controllers.Base
         }
 
         [HttpPost]
-        public virtual async Task<ActionResult> Create(T category)
+        public virtual async Task<ActionResult> Create(T item)
         {
-            await _db.Add(category);
+            await _db.Add(item);
             return NoContent();
         }
 
         [HttpPut("{id:guid}")]
-        public virtual async Task<ActionResult> Put(Guid id, T category)
+        public virtual async Task<ActionResult> Put(Guid id, T item)
         {
             var result = await _db.GetById(id);
             if (result == null) { return NotFound(Error($"{_type.Name} not found")); }
 
-            category.Id = id;
-            await _db.Update(category);
+            item.Id = id;
+            await _db.Update(item);
             return NoContent();
         }
 

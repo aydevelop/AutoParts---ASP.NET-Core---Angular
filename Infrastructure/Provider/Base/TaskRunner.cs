@@ -31,7 +31,7 @@ namespace Infrastructure.Provider.Base
             _logger.LogInformation("Task Start");
             new AutokladUa(_db, _logger, section["Autoklad"]).Run();
             new TemanComUa(_db, _logger, section["Teman"]).Run();
-            new AvtozoomComUa(_db, _logger, section["Avtozoom"]).Run();
+            new AutocompassComUa(_db, _logger, section["Autocompass"]).Run();
         }
 
         public Task StartAsync(CancellationToken stoppingToken)

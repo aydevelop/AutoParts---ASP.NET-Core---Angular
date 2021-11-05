@@ -4,6 +4,7 @@ using Database;
 using Database.Contract;
 using Database.Repository;
 using FluentValidation.AspNetCore;
+using Infrastructure.Provider.Base;
 using Infrastructure.Util;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -42,7 +43,7 @@ namespace AvtoZapchasti
             services.AddTransient<ICategoryRepository, CategoryRepository>();
             services.AddTransient<ISpareRepository, SpareRepository>();
             services.AddAutoMapper(typeof(AutoMapperConfig));
-            //services.AddHostedService<TaskRunner>();
+            services.AddHostedService<TaskRunner>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, AppDbContext dbContext)

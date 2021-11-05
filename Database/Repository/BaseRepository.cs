@@ -9,19 +9,19 @@ namespace Database.Repository
 {
     public class BaseRepository<T> : IRepository<T> where T : class
     {
-        private readonly AppDbContext _context;
+        private readonly AppDbContext _db;
 
-        public BaseRepository(AppDbContext context)
+        public BaseRepository(AppDbContext db)
         {
-            context.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
-            _context = context;
+            db.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
+            _db = db;
         }
 
         private async Task SaveAsync()
         {
             try
             {
-                await _context.SaveChangesAsync();
+                await _db.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException ex)
             {
@@ -33,44 +33,44 @@ namespace Database.Repository
 
         public async Task Add(T entity)
         {
-            _context.Add(entity);
+            _db.Add(entity);
             await SaveAsync();
         }
 
         public Task<int> Count(Expression<Func<T, bool>> predicate)
         {
-            return _context.Set<T>().Where(predicate).CountAsync();
+            return _db.Set<T>().Where(predicate).CountAsync();
         }
 
         public Task<int> Count()
         {
-            return _context.Set<T>().CountAsync();
+            return _db.Set<T>().CountAsync();
         }
 
         public async Task Delete(T entity)
         {
-            _context.Remove(entity);
+            _db.Remove(entity);
             await SaveAsync();
         }
 
         public Task<T[]> GetAll()
         {
-            return _context.Set<T>().ToArrayAsync();
+            return _db.Set<T>().ToArrayAsync();
         }
 
         public async Task<T[]> GetByFiler(Expression<Func<T, bool>> predicate)
         {
-            return await _context.Set<T>().Where(predicate).ToArrayAsync();
+            return await _db.Set<T>().Where(predicate).ToArrayAsync();
         }
 
         public async Task<T> GetById(Guid id)
         {
-            return await _context.Set<T>().FindAsync(id);
+            return await _db.Set<T>().FindAsync(id);
         }
 
         public async Task Update(T entity)
         {
-            _context.Entry(entity).State = EntityState.Modified;
+            _db.Entry(entity).State = EntityState.Modified;
             await SaveAsync();
         }
     }
