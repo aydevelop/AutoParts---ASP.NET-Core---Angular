@@ -40,7 +40,7 @@ namespace AvtoZapchasti.Controllers
         [HttpPost("register")]
         public async Task<ActionResult<AuthResponse>> RegisterAsync([FromBody] UserRegisterAction userRegisterAction)
         {
-            var user = new AppUser { UserName = userRegisterAction.UserName, Email = userRegisterAction.Email };
+            var user = new AppUser { UserName = userRegisterAction.UserName, Email = userRegisterAction.Email, SiteUrl = userRegisterAction.Site };
             var result = await _userManager.CreateAsync(user, userRegisterAction.Password);
 
             if (result.Succeeded)
@@ -84,6 +84,12 @@ namespace AvtoZapchasti.Controllers
             var result = _mapper.Map<AppUser, UserResponse>(me);
 
             return result;
+        }
+
+        [HttpGet("emailexists")]
+        public async Task<ActionResult<bool>> CheckEmailExistsAsync(string email)
+        {
+            return await _userManager.FindByEmailAsync(email) != null;
         }
     }
 }

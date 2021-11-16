@@ -6,5 +6,8 @@ namespace Infrastructure.User.Action
     {
         [Required]
         public string UserName { get; set; }
+
+        [Required]
+        public string Site { get; set; }
     }
 }

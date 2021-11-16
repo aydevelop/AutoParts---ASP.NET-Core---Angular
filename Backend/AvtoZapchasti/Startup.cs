@@ -50,6 +50,7 @@ namespace AvtoZapchasti
         {
             app.UseMiddleware<ExceptionMiddleware>();
             app.UseHttpsRedirection();
+            app.UseCorsServices();
 
             app.UseRouting();
             app.UseAuthentication();
