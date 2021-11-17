@@ -37,7 +37,7 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit() {
-    this.authService.register(this.loginForm.value).subscribe(
+    this.authService.login(this.loginForm.value).subscribe(
       (response) => {
         this.router.navigateByUrl('/');
       },

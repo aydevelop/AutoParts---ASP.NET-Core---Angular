@@ -1,0 +1,11 @@
+.spare-list {
+  display: flex;
+  margin-top: 60px;
+
+  .spare-filter {
+    width: 250px;
+    border: 1px solid gray;
+    padding: 50px 20px;
+    border-radius: 20px;
+  }
+}
