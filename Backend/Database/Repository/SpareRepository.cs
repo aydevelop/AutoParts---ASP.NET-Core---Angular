@@ -40,5 +40,13 @@ namespace Database.Repository
                 .ThenInclude(b => b.Brand)
                 .ToArrayAsync();
         }
+
+        public async Task<Spare> GetWithDetails(Guid id)
+        {
+            return await _db.Spares
+                .Include(q => q.Category)
+                .Include(q => q.Model).ThenInclude(q => q.Brand)
+                .FirstOrDefaultAsync(q => q.Id == id);
+        }
     }
 }

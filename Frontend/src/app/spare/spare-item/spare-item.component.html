@@ -1,21 +1,18 @@
-<p>
-  {{ spare.name }}
-</p>
-<p>
-  {{ spare.price }}
-</p>
-<p>
-  <img src="{{ spare.imageUrl }}" />
-</p>
-<p>
-  {{ spare.description }}
-</p>
-<p>
-  {{ spare.modelId }}
-</p>
-<p>
-  {{ spare.categoryId }}
-</p>
-<p>
-  {{ spare.providerId }}
-</p>
+<div class="card mb">
+    <img class="card-img-top" [src]="spare.imageUrl" alt="Card image cap" />
+    <div class="card-body mb">
+        <h5 class="card-title">{{ spare.name }}</h5>
+        <div class="text-right">
+            <p class="card-text">
+                <u>{{ spare.price | currency }}</u>
+            </p>
+            <button
+                routerLink="/spare/{{ spare.id }}"
+                type="button"
+                class="btn btn-primary mb w-100"
+            >
+                View
+            </button>
+        </div>
+    </div>
+</div>

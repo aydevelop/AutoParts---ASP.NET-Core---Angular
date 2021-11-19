@@ -1,12 +1,14 @@
 ﻿using Database.Contract;
 using Database.Model;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
 
 namespace AvtoZapchasti.Controllers.Base
 {
-    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
     public abstract class CrudController<T> : BaseController where T : BaseEntity
     {
         private readonly IRepository<T> _db;

@@ -1,14 +1,12 @@
-<div class="spare-list">
-  <div class="spare-filter">spare-filter</div>
-  <div class="spare-items">
-    <div class="spare-items-content">
-      <div class="col-8 mb-8" *ngFor="let spare of spares">
-        <p>
-          <a href="/spare/{{ spare.id }}">
-            {{ spare.name }}
-          </a>
-        </p>
-      </div>
+<div class="container base-margin-top">
+    <div class="spare-list row">
+        <div class="spare-filter col-12">spare-filter</div>
+        <div class="spare-items row base-margin-top">
+            <app-spare-item
+                *ngFor="let spare of spares"
+                [spare]="spare"
+                class="col-3"
+            ></app-spare-item>
+        </div>
     </div>
-  </div>
 </div>

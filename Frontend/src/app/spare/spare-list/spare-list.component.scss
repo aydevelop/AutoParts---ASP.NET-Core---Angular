@@ -1,11 +1,13 @@
 .spare-list {
-  display: flex;
-  margin-top: 60px;
+    .spare-filter {
+        border: 1px solid #007bff;
+        background-color: whitesmoke;
+        border-radius: 20px;
+        padding: 25px 20px;
+        margin-top: 0px;
+    }
 
-  .spare-filter {
-    width: 250px;
-    border: 1px solid gray;
-    padding: 50px 20px;
-    border-radius: 20px;
-  }
+    .spare-items {
+        margin-top: 50px;
+    }
 }

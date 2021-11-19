@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 
 namespace AvtoZapchasti.Controllers
 {
+    [AllowAnonymous]
     public class SpareController : CrudController<Spare>
     {
         private readonly ISpareRepository _db;
@@ -22,7 +23,12 @@ namespace AvtoZapchasti.Controllers
             _db = db;
         }
 
-        [AllowAnonymous]
+        [HttpGet("details/{id:guid}")]
+        public async Task<Spare> Details(Guid id)
+        {
+            return await _db.GetWithDetails(id);
+        }
+
         [HttpGet("filter")]
         public async Task<Pagination<Spare>> GetByFilter([FromQuery] SpareParamsAction spareParams)
         {
@@ -36,7 +42,6 @@ namespace AvtoZapchasti.Controllers
             return new Pagination<Spare>(spareParams.PageIndex, take, total, spares);
         }
 
-        [AllowAnonymous]
         [HttpGet("excel-generate")]
         public async Task<IActionResult> GetExcelByFilter([FromQuery] SpareParamsAction spareParams)
         {
