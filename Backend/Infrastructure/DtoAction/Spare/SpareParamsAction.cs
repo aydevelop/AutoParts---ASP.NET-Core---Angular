@@ -6,6 +6,7 @@ namespace Infrastructure.DtoAction.Spare
     {
         public Guid? CategoryId { get; set; }
         public Guid? BrandId { get; set; }
+        public Guid? ModelId { get; set; }
         public decimal? MaxPrice { get; set; }
         public decimal? MinPrice { get; set; }
 

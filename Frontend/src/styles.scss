@@ -33,3 +33,9 @@ nav .navbar-brand{
 body{
 	margin-bottom: 50px;
 }
+
+@media screen and (max-width: 992px) {
+  .container{
+    min-width:960px !important;
+  }
+}

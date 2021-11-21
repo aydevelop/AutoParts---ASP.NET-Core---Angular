@@ -1,4 +1,8 @@
 export class IFilterParams {
-    pageNumber = 1;
-    pageSize = 6;
+    pageNumber: number = 1;
+    pageSize: number = 8;
+
+    brandId?: string;
+    modelId?: string;
+    categoryId?: string;
 }

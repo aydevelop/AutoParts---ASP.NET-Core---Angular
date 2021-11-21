@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { PageChangedEvent } from 'ngx-bootstrap/pagination';
 
 @Component({
     selector: 'app-pager',
@@ -14,7 +15,7 @@ export class PagerComponent implements OnInit {
 
     ngOnInit(): void {}
 
-    onPagerChange(event: any) {
+    onPagerChange(event: PageChangedEvent) {
         this.pageChanged.emit(event.page);
     }
 }

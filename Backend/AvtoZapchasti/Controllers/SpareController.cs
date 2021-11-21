@@ -4,7 +4,6 @@ using Database.Contract;
 using Database.Model;
 using Infrastructure.DtoAction.Spare;
 using Infrastructure.Util;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.IO;
@@ -13,7 +12,6 @@ using System.Threading.Tasks;
 
 namespace AvtoZapchasti.Controllers
 {
-    [AllowAnonymous]
     public class SpareController : CrudController<Spare>
     {
         private readonly ISpareRepository _db;
