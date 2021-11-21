@@ -25,4 +25,8 @@ export class SpareDetailsComponent implements OnInit {
             });
         });
     }
+
+    goToUrl(): void {
+        window.location.href = this.spare.url;
+    }
 }

@@ -4,6 +4,7 @@ import { SpareListComponent } from './spare-list/spare-list.component';
 import { SpareItemComponent } from './spare-item/spare-item.component';
 import { SpareDetailsComponent } from './spare-details/spare-details.component';
 import { AppRoutingModule } from '../app-routing.module';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
     declarations: [
@@ -11,7 +12,7 @@ import { AppRoutingModule } from '../app-routing.module';
         SpareItemComponent,
         SpareDetailsComponent,
     ],
-    imports: [CommonModule, AppRoutingModule],
+    imports: [CommonModule, AppRoutingModule, SharedModule],
     exports: [SpareListComponent, SpareItemComponent, SpareDetailsComponent],
 })
 export class SpareModule {}

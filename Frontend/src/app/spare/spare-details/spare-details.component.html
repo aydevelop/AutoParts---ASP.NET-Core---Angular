@@ -16,7 +16,7 @@
                 </h3>
                 <div class="text-right col">
                     <button
-                        routerLink="{{ spare.url }}"
+                        (click)="goToUrl()"
                         type="button"
                         class="btn btn-success mb btnbuy"
                     >
@@ -45,6 +45,7 @@
         <div class="row description">
             <div class="col-12 ml-3 text-center">
                 <h4>Description</h4>
+                <hr />
                 <p>{{ spare.description }}</p>
             </div>
         </div>

@@ -2,6 +2,7 @@
 @import "~fork-awesome/css/fork-awesome.min.css";
 @import "~line-awesome/dist/line-awesome/css/line-awesome.min.css";
 
+
 input.ng-invalid.ng-touched {
   border: 1px solid red;
 }
@@ -27,4 +28,8 @@ nav .navbar-brand{
 
 .base-margin-top{
 	margin-top: 50px;
+}
+
+body{
+	margin-bottom: 50px;
 }
