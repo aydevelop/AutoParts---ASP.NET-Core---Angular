@@ -52,7 +52,7 @@ namespace Infrastructure.Provider
         public void Start(ItemProvider item)
         {
             DocLoad(item.url);
-            var links = DNode.SelectNodes("//div[@class='uk-container o-text-formatted']//a");
+            var links = DNode.SelectNodes("//div[@class='uk-container o-text-formatted']//a").Take(limit);
 
             foreach (HtmlNode link in links)
             {
@@ -125,9 +125,7 @@ namespace Infrastructure.Provider
 
         public void GetProduct(string url, Model model, Category category)
         {
-            Thread.Sleep(1000);
-            DocLoad(url);
-
+            Thread.Sleep(5000);
             string name = GetText("//h1[@class='o-section-title o-head-title']");
             string price = GetText("//*[@class='o-price-code']/strong").Replace("грн", "");
             var link = DNode.SelectSingleNode("//div[@class='uk-width-1-1 o-card-img']//a");

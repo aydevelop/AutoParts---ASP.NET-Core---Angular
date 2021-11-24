@@ -1,7 +1,8 @@
 ﻿using Database.Model;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -12,31 +13,6 @@ namespace Database
     {
         public static async Task SeedAsync(AppDbContext context, UserManager<AppUser> manager)
         {
-            if (!context.Brands.Any())
-            {
-                var brands = new List<Brand>
-                {
-                    new Brand
-                    {
-                        Id = Guid.NewGuid(),
-                        Name = "Audi"
-                    },
-                    new Brand
-                    {
-                         Id = Guid.NewGuid(),
-                        Name = "Mercedes"
-                    },
-                    new Brand
-                    {
-                        Id = Guid.NewGuid(),
-                        Name = "BMW"
-                    }
-                };
-
-                await context.Brands.AddRangeAsync(brands);
-                await context.SaveChangesAsync();
-            }
-
             if (!context.Users.Any())
             {
                 var admin = new AppUser
@@ -55,6 +31,18 @@ namespace Database
                 await manager.AddClaimAsync(admin, new Claim("role", "admin"));
                 await manager.CreateAsync(user, "Pa$$w0rd");
             }
+
+            if (!context.Spares.Any() && !context.Categories.Any())
+            {
+                string sql = File.ReadAllText("./../Database/data.sql");
+                string[] batches = sql.Split(new[] { "\nGO" }, StringSplitOptions.None);
+                foreach (string batch in batches)
+                {
+                    context.Database.ExecuteSqlRaw(batch);
+                }
+            }
+
+            await context.SaveChangesAsync();
         }
     }
 }

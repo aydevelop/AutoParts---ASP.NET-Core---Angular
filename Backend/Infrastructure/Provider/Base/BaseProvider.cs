@@ -25,6 +25,7 @@ namespace Infrastructure.Provider.Base
         public BaseProvider(AppDbContext context)
         {
             this.context = context;
+            this.context.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
             models = context.Models.Include(u => u.Brand).ToList();
             brands = context.Brands.ToList();
             categories = context.Categories.ToList();
@@ -53,7 +54,7 @@ namespace Infrastructure.Provider.Base
 
         public Category AddCategoryIfNotExist(string category)
         {
-            Category checkCategory = categories.Find(q => q.Name.ToLower() == category.ToLower());
+            Category checkCategory = categories.Find(q => q.Name.Trim().ToLower().Equals(category.Trim().ToLower()));
             if (checkCategory == null)
             {
                 checkCategory = context.Categories.Add(new Category() { Name = category }).Entity;

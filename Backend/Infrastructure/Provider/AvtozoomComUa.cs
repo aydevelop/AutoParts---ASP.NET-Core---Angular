@@ -52,7 +52,7 @@ namespace Infrastructure.Provider
         public void Start(ItemProvider item)
         {
             DocLoad(item.url);
-            var models = DNode.SelectNodes("//div[@class='container-white']//a[@class='title-item']");
+            var models = DNode.SelectNodes("//div[@class='container-white']//a[@class='title-item']").Take(limit);
 
             foreach (HtmlNode model in models)
             {
@@ -96,6 +96,19 @@ namespace Infrastructure.Provider
         private void CheckInfo(string categoryUrl, string model, string category)
         {
             Console.WriteLine(categoryUrl);
+            DocLoad(categoryUrl);
+
+            var subcategory = DNode.SelectNodes("//div[@class='case-cat-row']//a");
+            string subcategoryUrl = subcategory.First().Attributes["href"]?.Value;
+            if (subcategoryUrl != null)
+            {
+                subcategoryUrl = _host + subcategoryUrl;
+                GetSubCategory(subcategoryUrl, model, category);
+            }
+        }
+
+        private void GetSubCategory(string categoryUrl, string model, string category)
+        {
             Model checkModel = AddModelIfNotExist(model);
             Category checkCategory = AddCategoryIfNotExist(category);
 
@@ -128,7 +141,7 @@ namespace Infrastructure.Provider
             DocLoad(productUrl);
 
             string name = GetText("//h1[@class='title-item']");
-            string price = GetText("//*[@class='price-val']");
+            string price = GetText("//*[@class='price-val']").Trim().Replace(" ", "");
             var link = DNode.SelectSingleNode("//div[@id='gal-imags-first']//img");
             string image = link.Attributes["src"].Value;
 
@@ -145,6 +158,13 @@ namespace Infrastructure.Provider
 
             Spare spare = new Spare();
             spare.Name = name;
+            if (total.Contains(name))
+            {
+                return;
+            }
+            total.Add(name);
+
+
             spare.Price = Convert.ToDecimal(price);
             spare.ImageUrl = image;
             spare.Description = description;

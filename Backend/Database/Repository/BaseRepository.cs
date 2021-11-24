@@ -13,8 +13,8 @@ namespace Database.Repository
 
         public BaseRepository(AppDbContext db)
         {
-            db.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
             _db = db;
+            _db.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
         }
 
         private async Task SaveAsync()

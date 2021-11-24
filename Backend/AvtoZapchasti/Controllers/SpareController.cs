@@ -32,10 +32,11 @@ namespace AvtoZapchasti.Controllers
         {
             var criteria = GetCriteria(spareParams);
 
-            int total = await _db.Count();
+
+            int total = 0;
             int take = spareParams.PageSize;
             int skip = take * (spareParams.PageIndex - 1);
-            Spare[] spares = await _db.GetByFilterWithPaging(criteria, skip, take, "priceAsk");
+            Spare[] spares = await _db.GetByFilterWithPaging(criteria, skip, take, out total, "priceAsk");
 
             return new Pagination<Spare>(spareParams.PageIndex, take, total, spares);
         }

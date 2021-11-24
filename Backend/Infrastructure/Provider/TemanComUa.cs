@@ -52,7 +52,7 @@ namespace Infrastructure.Provider
         public void Start(ItemProvider item)
         {
             DocLoad(item.url);
-            var models = DNode.SelectNodes("//td[@class='cell-brand']//a");
+            var models = DNode.SelectNodes("//td[@class='cell-brand']//a").Take(limit);
 
             foreach (HtmlNode modelItem in models)
             {
@@ -134,6 +134,9 @@ namespace Infrastructure.Provider
             DocLoad(url);
 
             string name = GetText("//h1[@class='tgp-product-title']/span");
+            if (total.Contains(name)) { return; }
+            total.Add(name);
+
             string price = GetText("//div[@class='price']").Split(' ')[0];
             var link = DNode.SelectSingleNode("//div[@class='product-image']//img");
             string image = link.Attributes["data-src"].Value;
