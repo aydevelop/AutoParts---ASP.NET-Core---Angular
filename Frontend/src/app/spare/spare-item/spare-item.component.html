@@ -1,5 +1,10 @@
 <div class="card mb">
-    <img class="card-img-top" [src]="spare.imageUrl" alt="Card image cap" />
+    <img
+        class="card-img-top"
+        [src]="spare.imageUrl"
+        onerror="this.src='/assets/logo.png'"
+        alt="Card image cap"
+    />
     <div class="card-body mb">
         <h5 class="card-title">{{ spare.name }}</h5>
         <div class="text-right">

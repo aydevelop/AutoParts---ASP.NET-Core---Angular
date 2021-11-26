@@ -1,11 +1,14 @@
-<pagination 
-[boundaryLinks]="true" 
-[totalItems]="totalCount" 
-(pageChanged)="onPagerChange($event)"
-[itemsPerPage]="pageSize"
-previousText="&lsaquo;" 
-nextText="&rsaquo;"
-firstText="&laquo;" 
-lastText="&raquo;">
-</pagination>
-
+<div class="pagination-content">
+    <pagination
+        [boundaryLinks]="true"
+        [totalItems]="totalCount"
+        (pageChanged)="onPagerChange($event)"
+        [itemsPerPage]="pageSize"
+        previousText="&lsaquo;"
+        nextText="&rsaquo;"
+        firstText="&laquo;"
+        lastText="&raquo;"
+    >
+    </pagination>
+    <div></div>
+</div>
