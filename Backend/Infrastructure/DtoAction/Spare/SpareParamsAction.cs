@@ -9,6 +9,7 @@ namespace Infrastructure.DtoAction.Spare
         public Guid? ModelId { get; set; }
         public decimal? MaxPrice { get; set; }
         public decimal? MinPrice { get; set; }
+        public bool? IsFull { get; set; }
 
         public int PageIndex { get; set; } = 1;
         private const int _maxPageSize = 100;

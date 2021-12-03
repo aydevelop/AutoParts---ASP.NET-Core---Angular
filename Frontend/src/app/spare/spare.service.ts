@@ -35,6 +35,10 @@ export class SpareService {
             params = params.append('brandId', filterParams.brandId);
         }
 
+        if (filterParams.isFull) {
+            params = params.append('isFull', filterParams.isFull);
+        }
+
         return this.http
             .get<IPagination>(this.baseUrl + '/spare/filter', {
                 // observe: 'response',

@@ -17,7 +17,7 @@ namespace Database.Repository
             _db = db;
         }
 
-        public Task<Spare[]> GetByFilterWithPaging(Expression<Func<Spare, bool>> criteria, int skip, int take, out int total, string sort = "")
+        public Task<Spare[]> GetByFilterWithPaging(Expression<Func<Spare, bool>> criteria, int skip, int take, out int total, bool isFull, string sort = "")
         {
             var query = _db.Spares.Where(criteria);
             if (sort == "priceAsk")
@@ -30,6 +30,14 @@ namespace Database.Repository
             }
 
             total = query.Count();
+            if (isFull)
+            {
+                return query.Skip(skip).Take(take)
+                    .Include(q => q.Category)
+                    .Include(q => q.Model).ThenInclude(q => q.Brand)
+                    .ToArrayAsync();
+            }
+
             return query.Skip(skip).Take(take).ToArrayAsync();
         }
 

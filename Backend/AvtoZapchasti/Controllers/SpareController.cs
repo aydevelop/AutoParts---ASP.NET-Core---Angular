@@ -31,12 +31,12 @@ namespace AvtoZapchasti.Controllers
         public async Task<Pagination<Spare>> GetByFilter([FromQuery] SpareParamsAction spareParams)
         {
             var criteria = GetCriteria(spareParams);
-
-
             int total = 0;
+
             int take = spareParams.PageSize;
             int skip = take * (spareParams.PageIndex - 1);
-            Spare[] spares = await _db.GetByFilterWithPaging(criteria, skip, take, out total, "priceAsk");
+            bool isFull = spareParams.IsFull ?? false;
+            Spare[] spares = await _db.GetByFilterWithPaging(criteria, skip, take, out total, isFull, "priceAsk");
 
             return new Pagination<Spare>(spareParams.PageIndex, take, total, spares);
         }

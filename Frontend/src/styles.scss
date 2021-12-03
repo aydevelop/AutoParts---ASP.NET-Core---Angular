@@ -24,6 +24,7 @@ nav a{
 
 nav .navbar-brand{
 	margin-right: 30px;
+	
 }
 
 .base-margin-top{
@@ -39,3 +40,5 @@ body{
     min-width:960px !important;
   }
 }
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

@@ -6,6 +6,7 @@ import { AdminSpareEditComponent } from './admin-spare-edit/admin-spare-edit.com
 import { AdminSpareCreateComponent } from './admin-spare-create/admin-spare-create.component';
 import { AdminSpareFormComponent } from './admin-spare-form/admin-spare-form.component';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { MaterialModule } from 'src/app/material/material.module';
 
 @NgModule({
     declarations: [
@@ -15,6 +16,6 @@ import { SharedModule } from 'src/app/shared/shared.module';
         AdminSpareCreateComponent,
         AdminSpareFormComponent,
     ],
-    imports: [CommonModule, SharedModule],
+    imports: [CommonModule, SharedModule, MaterialModule],
 })
 export class AdminAreaModule {}

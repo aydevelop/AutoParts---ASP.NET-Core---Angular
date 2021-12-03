@@ -11,6 +11,7 @@ import { JwtInterceptorService } from './auth/jwt-interceptor.service';
 import { CoreModule } from './core/core.module';
 import { HomeModule } from './home/home.module';
 import { SharedModule } from './shared/shared.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
     declarations: [AppComponent],
@@ -22,6 +23,7 @@ import { SharedModule } from './shared/shared.module';
         HomeModule,
         AdminAreaModule,
         ClientAreaModule,
+        BrowserAnimationsModule,
     ],
     providers: [
         {
