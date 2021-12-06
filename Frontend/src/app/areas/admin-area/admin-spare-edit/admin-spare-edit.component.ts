@@ -1,15 +1,44 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { ISpare } from 'src/app/shared/models/spare';
+import { SpareService } from 'src/app/spare/spare.service';
+import { Location } from '@angular/common';
 
 @Component({
-  selector: 'app-admin-spare-edit',
-  templateUrl: './admin-spare-edit.component.html',
-  styleUrls: ['./admin-spare-edit.component.scss']
+    selector: 'app-admin-spare-edit',
+    templateUrl: './admin-spare-edit.component.html',
+    styleUrls: ['./admin-spare-edit.component.scss'],
 })
 export class AdminSpareEditComponent implements OnInit {
+    model!: ISpare;
 
-  constructor() { }
+    constructor(
+        private activatedRoute: ActivatedRoute,
+        private spareService: SpareService,
+        private location: Location
+    ) {}
 
-  ngOnInit(): void {
-  }
+    ngOnInit(): void {
+        this.activatedRoute.params.subscribe((params) => {
+            let id = params.id;
 
+            this.spareService.getSpare(id).subscribe((spare: ISpare) => {
+                this.model = spare;
+            });
+        });
+    }
+
+    saveChanges(editModel: any) {
+        let netModel = Object.assign(this.model, {
+            name: editModel.name,
+            categoryId: editModel.categoryId,
+        });
+
+        this.spareService.edit(this.model.id, this.model).subscribe(
+            () => {
+                this.location.back();
+            },
+            (error) => alert('Error: ' + error)
+        );
+    }
 }

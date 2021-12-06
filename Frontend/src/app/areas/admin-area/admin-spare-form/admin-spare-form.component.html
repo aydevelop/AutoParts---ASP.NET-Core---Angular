@@ -1,1 +1,51 @@
-<p>admin-spare-form works!</p>
+<form (submit)="saveChanges()" style="width: 800px" [formGroup]="form">
+    <mat-form-field style="width: 100%" appearance="fill">
+        <mat-label htmlFor="name">Name</mat-label>
+        <input shrink="false" formControlName="name" matInput />
+        <mat-error *ngIf="form.invalid">{{
+            getErrorMessageFieldName()
+        }}</mat-error>
+    </mat-form-field>
+    <mat-form-field style="width: 100%" appearance="fill">
+        <mat-label htmlFor="price">Price</mat-label>
+        <input shrink="false" formControlName="price" matInput type="number" />
+        <mat-error *ngIf="form.invalid">{{
+            getErrorMessageFieldName()
+        }}</mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+        <mat-label>Category</mat-label>
+        <mat-select formControlName="categoryId" [(ngModel)]="selectedCategory">
+            <mat-option
+                *ngFor="let category of categories"
+                [value]="category.id"
+            >
+                {{ category.name }}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+    <mat-form-field style="width: 100%" appearance="fill">
+        <mat-label htmlFor="description">Description</mat-label>
+        <textarea
+            rows="5"
+            shrink="false"
+            formControlName="description"
+            matInput
+        ></textarea>
+        <mat-error *ngIf="form.invalid">{{
+            getErrorMessageFieldName()
+        }}</mat-error>
+    </mat-form-field>
+
+    <div class="btns">
+        <button
+            [disabled]="form.invalid"
+            mat-flat-button
+            color="primary"
+            type="submit"
+        >
+            Save Changes
+        </button>
+        <a mat-stroked-button routerLink="/admin-area">Cancel</a>
+    </div>
+</form>

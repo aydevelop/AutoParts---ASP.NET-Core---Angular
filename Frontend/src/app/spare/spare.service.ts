@@ -67,4 +67,12 @@ export class SpareService {
     getModels() {
         return this.http.get<IModel[]>(this.baseUrl + '/model');
     }
+
+    delete(id: number) {
+        return this.http.delete(`${this.baseUrl}/spare/?id=${id}`);
+    }
+
+    edit(id: number, model: ISpare) {
+        return this.http.put(this.baseUrl + '/spare/' + id, model);
+    }
 }

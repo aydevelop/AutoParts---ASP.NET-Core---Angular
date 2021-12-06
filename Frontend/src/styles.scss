@@ -42,3 +42,19 @@ body{
 }
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.mat-flat-button.mat-primary, .mat-raised-button.mat-primary, .mat-fab.mat-primary, .mat-mini-fab.mat-primary {
+    background-color: #007bff !important;
+}
+
+input.ng-invalid.ng-touched{
+	border: 0px !important;
+}
+
+.mat-form-field-wrapper {
+    margin: 10px;
+}
+
+.mat-spinner{
+	margin: 60px auto
+}

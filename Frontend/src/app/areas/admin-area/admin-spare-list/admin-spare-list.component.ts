@@ -30,7 +30,7 @@ export class AdminSpareListComponent implements OnInit {
     constructor(private spareService: SpareService) {}
 
     ngOnInit(): void {
-        this.params.pageSize = 24;
+        this.params.pageSize = 100000;
         this.params.isFull = true;
         this.getSpares();
     }
@@ -52,5 +52,13 @@ export class AdminSpareListComponent implements OnInit {
                 console.log(error);
             }
         );
+    }
+
+    delete(id: number) {
+        this.spareService.delete(id).subscribe(() => {
+            this.getSpares();
+        });
+
+        return false;
     }
 }

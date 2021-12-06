@@ -1,6 +1,13 @@
-.jumbotron {
+.jumbotron2 {
     background-color: whitesmoke;
-    padding-top: 55px !important;
+    padding-top: 45px !important;
+    text-align: center;
+    padding: 20px;
+    padding-bottom: 60px;
+
+    .row {
+        margin-left: 0px;
+    }
 }
 
 .card {
@@ -9,5 +16,12 @@
 
 .admin-index-content {
     border-top: 3px solid #007bff;
-    margin-top: 60px;
+}
+
+h1 {
+    color: #455a64;
+}
+
+h4 {
+    color: #4527a0;
 }

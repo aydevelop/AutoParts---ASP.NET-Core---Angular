@@ -1,1 +1,13 @@
-<p>admin-spare-edit works!</p>
+<mat-spinner *ngIf="!model"></mat-spinner>
+<div *ngIf="model" class="edit-form">
+    <h3>
+        Edit Spare Part <br />
+        {{ model.id }}
+    </h3>
+
+    <app-admin-spare-form
+        *ngIf="model"
+        [model]="model"
+        (onSaveChanges)="saveChanges($event)"
+    ></app-admin-spare-form>
+</div>

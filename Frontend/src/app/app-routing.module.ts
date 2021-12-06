@@ -21,7 +21,7 @@ const routes: Routes = [
         component: AdminIndexComponent,
         children: [
             { path: '', component: AdminSpareListComponent },
-            { path: 'edit', component: AdminSpareEditComponent },
+            { path: 'edit/:id', component: AdminSpareEditComponent },
         ],
     },
 

@@ -17,5 +17,14 @@ table {
 
     .action1 {
         margin-right: 10px;
+        color: #43a047;
     }
+
+    .action2 {
+        color: #d81b60;
+    }
+}
+
+td.view-btn {
+    cursor: pointer;
 }
