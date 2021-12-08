@@ -1,7 +1,7 @@
 import { IBrand } from './brand';
 
 export interface IModel {
-    id: number;
+    id: string;
     name: string;
     brandId: string;
     brand?: IBrand;

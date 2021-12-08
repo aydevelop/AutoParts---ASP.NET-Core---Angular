@@ -68,6 +68,10 @@ export class SpareService {
         return this.http.get<IModel[]>(this.baseUrl + '/model');
     }
 
+    getModelsByBrand(id: any) {
+        return this.http.get<IModel[]>(this.baseUrl + `/model/getbybrand/${id}`);
+    }
+
     delete(id: number) {
         return this.http.delete(`${this.baseUrl}/spare/?id=${id}`);
     }

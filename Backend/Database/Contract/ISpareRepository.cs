@@ -10,5 +10,6 @@ namespace Database.Contract
         Task<Spare[]> GetByFilterWithPaging(Expression<Func<Spare, bool>> criteria, int skip, int take, out int total, bool isFull, string sort = "");
         Task<Spare[]> GetByFilterWithModel(Expression<Func<Spare, bool>> criteria);
         Task<Spare> GetWithDetails(Guid id);
+        Task<Spare[]> GetAllByBrand(Guid id);
     }
 }

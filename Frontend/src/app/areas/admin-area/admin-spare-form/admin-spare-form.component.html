@@ -37,6 +37,29 @@
         }}</mat-error>
     </mat-form-field>
 
+    <mat-form-field appearance="fill">
+        <mat-label>Brand</mat-label>
+        <mat-select formControlName="brandId" [(ngModel)]="selectedBrand">
+            <mat-option
+                *ngFor="let brand of brands"
+                [value]="brand.id"
+            >
+                {{ brand.name }}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+        <mat-label>Model</mat-label>
+        <mat-select formControlName="modelId" [(ngModel)]="selectedModel">
+            <mat-option
+                *ngFor="let model of models"
+                [value]="model.id"
+            >
+                {{ model.name }}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+
     <div class="btns">
         <button
             [disabled]="form.invalid"

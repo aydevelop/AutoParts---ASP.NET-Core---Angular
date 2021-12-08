@@ -46,6 +46,7 @@ namespace Infrastructure.Provider.Base
             if (checkModel == null)
             {
                 checkModel = context.Models.Add(new Model() { Name = model, BrandId = currentBrand.Id }).Entity;
+                context.SaveChanges();
                 models.Add(checkModel);
             }
 
@@ -58,6 +59,7 @@ namespace Infrastructure.Provider.Base
             if (checkCategory == null)
             {
                 checkCategory = context.Categories.Add(new Category() { Name = category }).Entity;
+                context.SaveChanges();
             }
 
             return checkCategory;
