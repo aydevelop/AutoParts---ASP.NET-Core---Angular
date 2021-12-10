@@ -17,7 +17,8 @@ namespace Database.Repository
             _db = db;
         }
 
-        public Task<Spare[]> GetByFilterWithPaging(Expression<Func<Spare, bool>> criteria, int skip, int take, out int total, bool isFull, string sort = "")
+        public Task<Spare[]> GetByFilterWithPaging(Expression<Func<Spare, bool>> criteria, int skip, int take,
+            out int total, bool isFull, string sort = "", string search = "")
         {
             var query = _db.Spares.Where(criteria);
             if (sort == "priceAsk")
@@ -27,6 +28,11 @@ namespace Database.Repository
             else if (sort == "priceDesc")
             {
                 query = query.OrderByDescending(q => q.Price);
+            }
+
+            if (!String.IsNullOrWhiteSpace(search))
+            {
+                query = query.Where(q => q.Name.ToLower().Contains(search));
             }
 
             total = query.Count();

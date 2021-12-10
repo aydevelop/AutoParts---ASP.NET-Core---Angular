@@ -36,7 +36,8 @@ namespace AvtoZapchasti.Controllers
             int take = spareParams.PageSize;
             int skip = take * (spareParams.PageIndex - 1);
             bool isFull = spareParams.IsFull ?? false;
-            Spare[] spares = await _db.GetByFilterWithPaging(criteria, skip, take, out total, isFull, "priceAsk");
+            Spare[] spares = await _db.GetByFilterWithPaging(criteria, skip, take, out total, isFull,
+                "priceAsk", spareParams.Search);
 
             return new Pagination<Spare>(spareParams.PageIndex, take, total, spares);
         }

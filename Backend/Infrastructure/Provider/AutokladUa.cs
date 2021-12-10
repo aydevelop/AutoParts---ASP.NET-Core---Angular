@@ -22,9 +22,9 @@ namespace Infrastructure.Provider
             this._logger = logger;
             this._host = host;
 
-            _providers.Add(new ItemProvider() { brand = EnumBrand.Audi, url = _host + "/cars/audi/" });
-            _providers.Add(new ItemProvider() { brand = EnumBrand.Audi, url = _host + "/cars/bmw/" });
             _providers.Add(new ItemProvider() { brand = EnumBrand.Audi, url = _host + "/cars/mercedes/" });
+            _providers.Add(new ItemProvider() { brand = EnumBrand.Audi, url = _host + "/cars/bmw/" });
+            _providers.Add(new ItemProvider() { brand = EnumBrand.Audi, url = _host + "/cars/audi/" });
         }
 
         public override void Run()

@@ -6,4 +6,5 @@ export class IFilterParams {
     brandId?: string;
     modelId?: string;
     categoryId?: string;
+    search?: string;
 }

@@ -30,11 +30,10 @@ export class AdminSpareEditComponent implements OnInit {
 
     saveChanges(editModel: any) {
         let netModel = Object.assign(this.model, {
-            name: editModel.name,
-            categoryId: editModel.categoryId,
+            ...editModel,
         });
 
-        this.spareService.edit(this.model.id, this.model).subscribe(
+        this.spareService.edit(this.model.id, netModel).subscribe(
             () => {
                 this.location.back();
             },

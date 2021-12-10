@@ -22,5 +22,16 @@ select {
 }
 
 select.category {
-    width: 280px;
+    width: 260px;
+    margin-right: -70px;
+}
+
+.search {
+    position: relative;
+    width: 360px;
+}
+
+.category {
+    position: relative;
+    top: 3px;
 }

@@ -42,6 +42,16 @@ namespace Database
                 }
             }
 
+            for (int i = 100; i <= 900; i += 100)
+            {
+                context.Models.Add(new Model.Model()
+                {
+                    Name = "m" + i,
+                    BrandId = context.Brands.OrderBy(c => Guid.NewGuid())
+                      .FirstOrDefault().Id
+                });
+            }
+
             await context.SaveChangesAsync();
         }
     }

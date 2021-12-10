@@ -19,6 +19,7 @@ export class SpareListComponent implements OnInit {
     categories!: ICategory[];
     brands!: IBrand[];
     models!: IModel[];
+    search: string = '';
 
     constructor(private spareService: SpareService) {}
 
@@ -36,6 +37,7 @@ export class SpareListComponent implements OnInit {
                 this.totalCount = resp.count;
                 this.params.pageNumber = resp.pageIndex;
                 this.params.pageSize = resp.pageSize;
+                this.params.search = this.search;
             },
             (error) => {
                 console.log(error);
@@ -114,5 +116,9 @@ export class SpareListComponent implements OnInit {
             this.params.pageNumber = 1;
             this.getSpares();
         }
+    }
+
+    modelChanged(newObj: any) {
+        this.getSpares();
     }
 }

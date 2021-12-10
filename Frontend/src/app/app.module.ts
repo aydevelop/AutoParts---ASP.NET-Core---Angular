@@ -12,6 +12,7 @@ import { CoreModule } from './core/core.module';
 import { HomeModule } from './home/home.module';
 import { SharedModule } from './shared/shared.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
     declarations: [AppComponent],
@@ -24,6 +25,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
         AdminAreaModule,
         ClientAreaModule,
         BrowserAnimationsModule,
+        FormsModule,
     ],
     providers: [
         {

@@ -39,6 +39,10 @@ export class SpareService {
             params = params.append('isFull', filterParams.isFull);
         }
 
+        if (filterParams.search?.length) {
+            params = params.append('search', filterParams.search);
+        }
+
         return this.http
             .get<IPagination>(this.baseUrl + '/spare/filter', {
                 // observe: 'response',
@@ -69,7 +73,9 @@ export class SpareService {
     }
 
     getModelsByBrand(id: any) {
-        return this.http.get<IModel[]>(this.baseUrl + `/model/getbybrand/${id}`);
+        return this.http.get<IModel[]>(
+            this.baseUrl + `/model/getbybrand/${id}`
+        );
     }
 
     delete(id: number) {

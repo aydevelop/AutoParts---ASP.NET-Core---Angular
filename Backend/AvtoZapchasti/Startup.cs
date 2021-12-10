@@ -33,6 +33,11 @@ namespace AvtoZapchasti
                     options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull);
 
             services.AddDbContext<AppDbContext>(q => q.UseSqlServer(Configuration.GetConnectionString("DefConnection")));
+            //services.AddDbContext<AppDbContext>(q => q.UseMySql(
+            //    Configuration.GetConnectionString("MysqlConnection"),
+            //    new MySqlServerVersion(new Version(10, 4, 22))
+            //));
+
             services.AddApplicationServices(Configuration);
             services.AddTokenAuthentication(Configuration["keyjwt"]);
             services.AddSwaggerDocumentation();

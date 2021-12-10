@@ -26,6 +26,7 @@ export class AdminSpareFormComponent implements OnInit {
     selectedModel!: string;
     brands!: IBrand[];
     models!: IModel[];
+    isLoaded: boolean = false;
 
     constructor(
         private router: Router,
@@ -33,10 +34,14 @@ export class AdminSpareFormComponent implements OnInit {
         private spareService: SpareService
     ) {}
 
+    ngAfterViewInit() {
+        this.isLoaded = true;
+    }
+
     ngOnInit(): void {
         this.selectedCategory = this.model.category?.id || '';
         this.selectedBrand = this.model.model?.brand?.id || '';
-        this.selectedModel =  this.model.model?.id || '';
+        this.selectedModel = this.model.model?.id || '';
         this.getCategories();
         this.getBrands();
         this.getModels();
@@ -119,7 +124,9 @@ export class AdminSpareFormComponent implements OnInit {
     }
 
     saveChanges() {
-        this.onSaveChanges.emit(this.form.value);
+        let netModel = Object.assign(this.form.value);
+
+        this.onSaveChanges.emit(netModel);
     }
 
     getErrorMessageFieldName() {
@@ -129,5 +136,13 @@ export class AdminSpareFormComponent implements OnInit {
         }
 
         return '';
+    }
+
+    doBrand(event: any) {
+        this.selectedBrand = event;
+        // if (this.isLoaded == true) {
+        //     this.selectedModel = '';
+        // }
+        this.getModels();
     }
 }
