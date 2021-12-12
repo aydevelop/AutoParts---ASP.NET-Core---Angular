@@ -60,6 +60,12 @@ export class SpareService {
         return this.http.get<ISpare>(this.baseUrl + '/spare/details/' + id);
     }
 
+    getSpareByProvider(name: string) {
+        return this.http.get<ISpare>(
+            this.baseUrl + '/spare/byprovider/' + name
+        );
+    }
+
     getCategories() {
         return this.http.get<ICategory[]>(this.baseUrl + '/category');
     }

@@ -1,149 +1,154 @@
 <div class="card bg-light mt-4">
-  <article class="card-body mx-auto" style="max-width: 400px">
-    <h4 class="card-title mb-4 text-center">Create Account</h4>
-    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-      <div class="form-group input-group">
-        <div class="input-group-prepend">
-          <span class="input-group-text"> <i class="fa fa-user"></i> </span>
-        </div>
-        <input
-          name="userName"
-          formControlName="userName"
-          class="form-control"
-          placeholder="User Name"
-          type="text"
-        />
-      </div>
-      <div
-        *ngIf="
-          registerForm.controls['userName'].invalid &&
-          registerForm.controls['userName'].touched
-        "
-        class="invalid-block"
-      >
-        User name is required
-      </div>
-      <div class="form-group input-group">
-        <div class="input-group-prepend">
-          <span class="input-group-text">
-            <i class="fa fa-envelope"></i>
-          </span>
-        </div>
-        <input
-          name="email"
-          formControlName="email"
-          class="form-control"
-          placeholder="Email"
-          type="email"
-        />
-      </div>
-      <div
-        *ngIf="
-          registerForm.controls['email'].invalid &&
-          registerForm.controls['email'].touched
-        "
-        class="invalid-block"
-      >
-        Email is required
-      </div>
-      <div
-        *ngIf="
-          registerForm.controls['email'].errors?.required &&
-          registerForm.controls['email'].touched
-        "
-        class="invalid-block"
-      >
-        Email is required
-      </div>
-      <div
-        *ngIf="
-          registerForm.controls['email'].errors?.pattern &&
-          registerForm.controls['email'].touched
-        "
-        class="invalid-block"
-      >
-        Email is invalid
-      </div>
-      <div
-        *ngIf="
-          registerForm.controls['email'].errors?.emailExists &&
-          registerForm.controls['email'].touched
-        "
-        class="invalid-block"
-      >
-        Email is exists
-      </div>
-      <div class="form-group input-group">
-        <div class="input-group-prepend">
-          <span style="padding: 0px 10px" class="input-group-text">
-            <i class="fas fa-sitemap"></i>
-          </span>
-        </div>
-        <input
-          name="site"
-          formControlName="site"
-          class="form-control"
-          placeholder="Website"
-        />
-      </div>
-      <div
-        *ngIf="
-          registerForm.controls['site'].errors?.required &&
-          registerForm.controls['site'].touched
-        "
-        class="invalid-block"
-      >
-        Website is required
-      </div>
-      <div
-        *ngIf="
-          registerForm.controls['site'].errors?.pattern &&
-          registerForm.controls['site'].touched
-        "
-        class="invalid-block"
-      >
-        Website is invalid
-      </div>
-      <div class="form-group input-group">
-        <div class="input-group-prepend">
-          <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
-        </div>
-        <input
-          name="password"
-          formControlName="password"
-          class="form-control"
-          placeholder="Password"
-          type="password"
-        />
-      </div>
-      <div
-        class="invalid-block"
-        *ngIf="
-          registerForm.controls['password'].invalid &&
-          registerForm.controls['password'].touched
-        "
-      >
-        Password is required
-      </div>
-      <div class="form-group">
-        <button
-          type="submit"
-          class="btn btn-primary btn-block"
-          [disabled]="registerForm.invalid"
-        >
-          Create Account
-        </button>
-      </div>
-      <p class="text-center">
-        Have an account? <a href="/login" [routerLink]="['/login']">Log In</a>
-      </p>
-      <div class="invalid-block">
-        <ul *ngIf="errors">
-          <li *ngFor="let error of errors">
-            {{ error }}
-          </li>
-        </ul>
-      </div>
-    </form>
-  </article>
+    <article class="card-body mx-auto" style="max-width: 400px">
+        <h4 class="card-title mb-4 text-center">Create Account</h4>
+        <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+            <div class="form-group input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">
+                        <i class="fa fa-user"></i>
+                    </span>
+                </div>
+                <input
+                    name="userName"
+                    formControlName="userName"
+                    class="form-control"
+                    placeholder="User Name"
+                    type="text"
+                />
+            </div>
+            <div
+                *ngIf="
+                    registerForm.controls['userName'].invalid &&
+                    registerForm.controls['userName'].touched
+                "
+                class="invalid-block"
+            >
+                User name is required
+            </div>
+            <div class="form-group input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">
+                        <i class="fa fa-envelope"></i>
+                    </span>
+                </div>
+                <input
+                    name="email"
+                    formControlName="email"
+                    class="form-control"
+                    placeholder="Email"
+                    type="email"
+                />
+            </div>
+            <div
+                *ngIf="
+                    registerForm.controls['email'].invalid &&
+                    registerForm.controls['email'].touched
+                "
+                class="invalid-block"
+            >
+                Email is required
+            </div>
+            <div
+                *ngIf="
+                    registerForm.controls['email'].errors?.required &&
+                    registerForm.controls['email'].touched
+                "
+                class="invalid-block"
+            >
+                Email is required
+            </div>
+            <div
+                *ngIf="
+                    registerForm.controls['email'].errors?.pattern &&
+                    registerForm.controls['email'].touched
+                "
+                class="invalid-block"
+            >
+                Email is invalid
+            </div>
+            <div
+                *ngIf="
+                    registerForm.controls['email'].errors?.emailExists &&
+                    registerForm.controls['email'].touched
+                "
+                class="invalid-block"
+            >
+                Email is exists
+            </div>
+            <div class="form-group input-group">
+                <div class="input-group-prepend">
+                    <span style="padding: 0px 10px" class="input-group-text">
+                        <i class="fas fa-sitemap"></i>
+                    </span>
+                </div>
+                <input
+                    name="site"
+                    formControlName="site"
+                    class="form-control"
+                    placeholder="Website"
+                />
+            </div>
+            <div
+                *ngIf="
+                    registerForm.controls['site'].errors?.required &&
+                    registerForm.controls['site'].touched
+                "
+                class="invalid-block"
+            >
+                Website is required
+            </div>
+            <div
+                *ngIf="
+                    registerForm.controls['site'].errors?.pattern &&
+                    registerForm.controls['site'].touched
+                "
+                class="invalid-block"
+            >
+                Website is invalid
+            </div>
+            <div class="form-group input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">
+                        <i class="fa fa-lock"></i>
+                    </span>
+                </div>
+                <input
+                    name="password"
+                    formControlName="password"
+                    class="form-control"
+                    placeholder="Password"
+                    type="password"
+                />
+            </div>
+            <div
+                class="invalid-block"
+                *ngIf="
+                    registerForm.controls['password'].invalid &&
+                    registerForm.controls['password'].touched
+                "
+            >
+                Password is required
+            </div>
+            <div class="form-group">
+                <button
+                    type="submit"
+                    class="btn btn-primary btn-block"
+                    [disabled]="registerForm.invalid"
+                >
+                    Create Account
+                </button>
+            </div>
+            <p class="text-center mt-4">
+                Have an account?
+                <a href="/login" [routerLink]="['/login']">Log In</a>
+            </p>
+            <div class="invalid-block">
+                <ul *ngIf="errors">
+                    <li *ngFor="let error of errors">
+                        {{ error }}
+                    </li>
+                </ul>
+            </div>
+        </form>
+    </article>
 </div>

@@ -1,1 +1,83 @@
-<p>client-list works!</p>
+<h1 class="text-center mt-5 pt-1">
+    <a style="" href="{{ this.siteFull }}"> {{ this.siteFull }}</a>
+</h1>
+
+<link
+    href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+    rel="stylesheet"
+/>
+
+<div class="container">
+    <div class="mt-5">
+        <div
+            class="
+                d-style
+                btn btn-brc-tp
+                border-2
+                bgc-white
+                btn-outline-blue btn-h-outline-blue btn-a-outline-blue
+                w-100
+                my-2
+                py-3
+                shadow
+            "
+        >
+            <!-- Basic Plan -->
+            <div class="row align-items-center">
+                <div class="col-12 col-md-4">
+                    <h4
+                        class="
+                            pt-3
+                            text-170 text-600 text-primary-d1
+                            letter-spacing
+                        "
+                    >
+                        <i
+                            class="
+                                fa fa-gear
+                                text-success-m2 text-110
+                                mr-2
+                                mt-1
+                            "
+                        ></i>
+                        Total spare parts:
+                        <span class="ml-3" style="text-decoration: underline">
+                            1383
+                        </span>
+                    </h4>
+                </div>
+
+                <ul
+                    class="
+                        list-unstyled
+                        mb-0
+                        col-12 col-md-4
+                        text-dark-l1 text-90 text-left
+                        my-4 my-md-0
+                    "
+                ></ul>
+
+                <div class="col-12 col-md-4 text-center">
+                    <a
+                        href="#"
+                        class="
+                            f-n-hover
+                            btn btn-info btn-raised
+                            px-4
+                            py-25
+                            w-75
+                            text-600
+                        "
+                        >Download excel file</a
+                    >
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mt-5">
+    <ul *ngIf="arrCategories?.length">
+        <li *ngFor="let item of arrCategories">{{ item | json }}</li>
+    </ul>
+</div>

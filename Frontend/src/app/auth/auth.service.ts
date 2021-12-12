@@ -53,7 +53,7 @@ export class AuthService {
     }
 
     getRole(): string {
-        return this.getFieldFromJWT(this.roleField);
+        return this.getFieldFromJWT(this.roleField) || '-';
     }
 
     saveToken(authenticationResponse: IAuthenticationResponse) {

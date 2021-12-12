@@ -27,6 +27,12 @@ namespace AvtoZapchasti.Controllers
             return await _db.GetWithDetails(id);
         }
 
+        [HttpGet("byprovider/{name}")]
+        public async Task<Spare[]> GetSparesByProvider(string name)
+        {
+            return await _db.GetByProvider(name);
+        }
+
         [HttpGet("filter")]
         public async Task<Pagination<Spare>> GetByFilter([FromQuery] SpareParamsAction spareParams)
         {

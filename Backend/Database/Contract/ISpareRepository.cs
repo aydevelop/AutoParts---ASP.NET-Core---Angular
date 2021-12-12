@@ -11,5 +11,6 @@ namespace Database.Contract
         Task<Spare[]> GetByFilterWithModel(Expression<Func<Spare, bool>> criteria);
         Task<Spare> GetWithDetails(Guid id);
         Task<Spare[]> GetAllByBrand(Guid id);
+        Task<Spare[]> GetByProvider(string name);
     }
 }

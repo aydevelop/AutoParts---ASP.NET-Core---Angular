@@ -40,12 +40,18 @@ namespace AvtoZapchasti.Controllers
         [HttpPost("register")]
         public async Task<ActionResult<AuthResponse>> RegisterAsync([FromBody] UserRegisterAction userRegisterAction)
         {
-            var user = new AppUser { UserName = userRegisterAction.UserName, Email = userRegisterAction.Email, SiteUrl = userRegisterAction.Site };
-            var result = await _userManager.CreateAsync(user, userRegisterAction.Password);
+            var user = new AppUser
+            {
+                UserName = userRegisterAction.UserName,
+                Email = userRegisterAction.Email,
+                SiteUrl = userRegisterAction.Site
+            };
 
+            var result = await _userManager.CreateAsync(user, userRegisterAction.Password);
             if (result.Succeeded)
             {
-                return await _userManager.GetTokenAsync<AppUser>(user.Email, _configuration["keyjwt"]);
+                string site = user.SiteUrl ?? "";
+                return await _userManager.GetTokenAsync<AppUser>(user.Email, site, _configuration["keyjwt"]);
             }
             else
             {
@@ -65,7 +71,8 @@ namespace AvtoZapchasti.Controllers
             var result = await _signInManager.PasswordSignInAsync(user, userLoginAction.Password, true, false);
             if (result.Succeeded)
             {
-                return await _userManager.GetTokenAsync<AppUser>(userLoginAction.Email, _configuration["keyjwt"]);
+                string site = user.SiteUrl ?? "";
+                return await _userManager.GetTokenAsync<AppUser>(userLoginAction.Email, site, _configuration["keyjwt"]);
             }
             else
             {

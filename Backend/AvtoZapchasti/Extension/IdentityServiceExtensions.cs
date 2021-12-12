@@ -55,9 +55,9 @@ namespace AvtoZapchasti.Extension
             return services;
         }
 
-        public static async Task<AuthResponse> GetTokenAsync<T>(this UserManager<T> manager, string email, String keyjwt) where T : IdentityUser
+        public static async Task<AuthResponse> GetTokenAsync<T>(this UserManager<T> manager, string email, string site, String keyjwt) where T : IdentityUser
         {
-            var claims = new List<Claim>() { new Claim("email", email) };
+            var claims = new List<Claim>() { new Claim("email", email), new Claim("site", site) };
             var user = await manager.FindByEmailAsync(email);
             if (user == null) { return new AuthResponse(); }
 

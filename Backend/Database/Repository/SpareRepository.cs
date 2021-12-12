@@ -71,5 +71,13 @@ namespace Database.Repository
                     .ThenInclude(q => q.Brand)
                 .Where(q => q.Model.Brand.Id == id).ToArrayAsync();
         }
+
+        public async Task<Spare[]> GetByProvider(string name)
+        {
+            return await _db.Spares
+                .Include(q => q.Provider)
+                .Include(q => q.Category)
+                .Where(q => q.Provider.Name.Contains(name)).ToArrayAsync();
+        }
     }
 }

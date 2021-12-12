@@ -25,29 +25,43 @@
                     >Spare Parts</a
                 >
             </li>
-            <li class="nav-item">
-                <a
-                    class="nav-link"
-                    routerLinkActive="active"
-                    [routerLink]="['/admin-area']"
-                    href="#"
-                    >Admin Area</a
-                >
-            </li>
-            <li class="nav-item">
-                <a
-                    class="nav-link"
-                    routerLinkActive="active"
-                    [routerLink]="['/client-area']"
-                    href="#"
-                    >Client Area</a
-                >
-            </li>
+            <app-authorize-view [role]="'admin'">
+                <ng-container authorized>
+                    <li class="nav-item">
+                        <a
+                            class="nav-link"
+                            routerLinkActive="active"
+                            [routerLink]="['/admin-area']"
+                            href="#"
+                            >Admin Area</a
+                        >
+                    </li>
+                </ng-container>
+            </app-authorize-view>
+            <app-authorize-view [role]="'-'">
+                <ng-container authorized>
+                    <li class="nav-item">
+                        <a
+                            class="nav-link"
+                            routerLinkActive="active"
+                            [routerLink]="['/client-area']"
+                            href="#"
+                            >Client Area</a
+                        >
+                    </li>
+                </ng-container>
+            </app-authorize-view>
         </ul>
 
         <app-authorize-view>
             <ng-container authorized>
-                <span>Hello, {{ authService.getFieldFromJWT("email") }}</span>
+                <span class="user-info">
+                    <span
+                        ><span class="s-black">[</span>
+                        {{ authService.getFieldFromJWT("email") }}
+                        <span class="s-black">]</span></span
+                    ></span
+                >
                 <a href="#" (click)="authService.logout()">Logout</a>
             </ng-container>
             <ng-container notAuthorized>
