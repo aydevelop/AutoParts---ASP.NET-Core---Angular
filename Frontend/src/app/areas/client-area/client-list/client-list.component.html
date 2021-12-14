@@ -1,83 +1,107 @@
-<h1 class="text-center mt-5 pt-1">
-    <a style="" href="{{ this.siteFull }}"> {{ this.siteFull }}</a>
-</h1>
+<div *ngIf="!spares?.length" class="mt-5 pt-4">
+    <mat-spinner></mat-spinner>
+</div>
 
-<link
-    href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
-    rel="stylesheet"
-/>
+<div class="mt-2" *ngIf="spares?.length">
+    <h1 class="text-center mt-5 pt-1">
+        <a href="{{ this.siteFull }}"> {{ this.siteFull }}</a>
+    </h1>
 
-<div class="container">
-    <div class="mt-5">
-        <div
-            class="
-                d-style
-                btn btn-brc-tp
-                border-2
-                bgc-white
-                btn-outline-blue btn-h-outline-blue btn-a-outline-blue
-                w-100
-                my-2
-                py-3
-                shadow
-            "
-        >
-            <!-- Basic Plan -->
-            <div class="row align-items-center">
-                <div class="col-12 col-md-4">
-                    <h4
-                        class="
-                            pt-3
-                            text-170 text-600 text-primary-d1
-                            letter-spacing
-                        "
-                    >
-                        <i
+    <link
+        href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+        rel="stylesheet"
+    />
+
+    <div class="container">
+        <div class="mt-5">
+            <div
+                class="
+                    d-style
+                    btn btn-brc-tp
+                    border-2
+                    bgc-white
+                    btn-outline-blue btn-h-outline-blue btn-a-outline-blue
+                    w-100
+                    my-2
+                    py-3
+                    shadow
+                "
+            >
+                <div class="row align-items-center">
+                    <div class="col-12 col-md-6 text-left pl-5">
+                        <ul class="list-unstyled mb-0">
+                            <li>
+                                <i
+                                    class="
+                                        fa fa-check
+                                        text-success-m2 text-110
+                                        mr-2
+                                        mt-1
+                                    "
+                                ></i>
+                                Total spare parts: {{ spares.length }}
+                            </li>
+                            <li>
+                                <i
+                                    class="
+                                        fa fa-check
+                                        text-success-m2 text-110
+                                        mr-2
+                                        mt-1
+                                    "
+                                ></i>
+                                Total categories: {{ arrCategories.length }}
+                            </li>
+                            <li>
+                                <i
+                                    class="
+                                        fa fa-check
+                                        text-success-m2 text-110
+                                        mr-2
+                                        mt-1
+                                    "
+                                ></i>
+                                Total views: {{ views }}
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="col-12 col-md-6 text-center">
+                        <a
+                            href="{{ baseUrl }}/Spare/excel-generate?provider={{
+                                site
+                            }}"
                             class="
-                                fa fa-gear
-                                text-success-m2 text-110
-                                mr-2
-                                mt-1
+                                f-n-hover
+                                btn btn-info btn-raised
+                                px-4
+                                py-25
+                                w-50
+                                text-600
                             "
-                        ></i>
-                        Total spare parts:
-                        <span class="ml-3" style="text-decoration: underline">
-                            1383
-                        </span>
-                    </h4>
-                </div>
-
-                <ul
-                    class="
-                        list-unstyled
-                        mb-0
-                        col-12 col-md-4
-                        text-dark-l1 text-90 text-left
-                        my-4 my-md-0
-                    "
-                ></ul>
-
-                <div class="col-12 col-md-4 text-center">
-                    <a
-                        href="#"
-                        class="
-                            f-n-hover
-                            btn btn-info btn-raised
-                            px-4
-                            py-25
-                            w-75
-                            text-600
-                        "
-                        >Download excel file</a
-                    >
+                            >Download excel file</a
+                        >
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <div class="mt-5">
+        <div class="categories">
+            <ul *ngIf="arrCategories?.length">
+                <li *ngFor="let item of arrCategories">{{ item }}</li>
+            </ul>
+        </div>
+    </div>
 </div>
 
-<div class="mt-5">
-    <ul *ngIf="arrCategories?.length">
-        <li *ngFor="let item of arrCategories">{{ item | json }}</li>
-    </ul>
+<hr />
+<div id="chart" class="mt-5">
+    <apx-chart
+        [series]="chartOptions.series"
+        [chart]="chartOptions.chart"
+        [labels]="chartOptions.labels"
+        [responsive]="chartOptions.responsive"
+    ></apx-chart>
 </div>

@@ -10,6 +10,7 @@ namespace Database.Model
         public string ImageUrl { get; set; }
         public string Description { get; set; }
         public string Url { get; set; }
+        public int ViewCount { get; set; } = 1;
 
         public Guid ModelId { get; set; }
         public virtual Model Model { get; set; }

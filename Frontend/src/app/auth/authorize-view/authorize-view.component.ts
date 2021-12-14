@@ -15,6 +15,10 @@ export class AuthorizeViewComponent implements OnInit {
     role!: string;
 
     public isAuthorized() {
+        if (this.role == '-') {
+            return false;
+        }
+
         if (this.role) {
             return this.authService.getRole() === this.role;
         }

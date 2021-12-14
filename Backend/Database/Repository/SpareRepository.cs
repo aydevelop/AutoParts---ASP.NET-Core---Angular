@@ -58,10 +58,18 @@ namespace Database.Repository
 
         public async Task<Spare> GetWithDetails(Guid id)
         {
-            return await _db.Spares
+            var spare = await _db.Spares.FirstOrDefaultAsync(q => q.Id == id);
+            spare.ViewCount = spare.ViewCount + 1;
+            _db.Update(spare);
+            await _db.SaveChangesAsync();
+
+
+            var result = await _db.Spares
                 .Include(q => q.Category)
                 .Include(q => q.Model).ThenInclude(q => q.Brand)
                 .FirstOrDefaultAsync(q => q.Id == id);
+
+            return result;
         }
 
         public async Task<Spare[]> GetAllByBrand(Guid id)

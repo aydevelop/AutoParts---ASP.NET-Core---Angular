@@ -13,10 +13,11 @@ import { HomeModule } from './home/home.module';
 import { SharedModule } from './shared/shared.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
-
+import { GoogleChartsModule } from 'angular-google-charts';
 @NgModule({
     declarations: [AppComponent],
     imports: [
+        GoogleChartsModule,
         BrowserModule,
         AppRoutingModule,
         CoreModule,

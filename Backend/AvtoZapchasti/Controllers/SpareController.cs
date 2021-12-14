@@ -7,6 +7,7 @@ using Infrastructure.Util;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.IO;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
@@ -49,10 +50,14 @@ namespace AvtoZapchasti.Controllers
         }
 
         [HttpGet("excel-generate")]
-        public async Task<IActionResult> GetExcelByFilter([FromQuery] SpareParamsAction spareParams)
+        public async Task<IActionResult> GetExcelByFilter([FromQuery] SpareParamsAction spareParams, [FromQuery] string provider)
         {
             var criteria = GetCriteria(spareParams);
             Spare[] spares = await _db.GetByFilterWithModel(criteria);
+            if (!string.IsNullOrWhiteSpace(provider))
+            {
+                spares = spares.Where(q => q.Name.Contains(provider)).ToArray();
+            }
 
             using (var workbook = new XLWorkbook())
             {

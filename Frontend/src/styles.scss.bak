@@ -56,8 +56,5 @@ input.ng-invalid.ng-touched{
 }
 
 .mat-spinner{
-	margin: 60px auto;
-}
-.mat-progress-spinner circle, .mat-spinner circle {
-	stroke: #007bff! important;
+	margin: 60px auto
 }

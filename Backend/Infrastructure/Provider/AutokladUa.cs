@@ -125,11 +125,11 @@ namespace Infrastructure.Provider
 
         public void GetProduct(string url, Model model, Category category)
         {
-            Thread.Sleep(5000);
+            Thread.Sleep(500);
             string name = GetText("//h1[@class='o-section-title o-head-title']");
             string price = GetText("//*[@class='o-price-code']/strong").Replace("грн", "");
-            var link = DNode.SelectSingleNode("//div[@class='uk-width-1-1 o-card-img']//a");
-            string image = link.Attributes["href"].Value;
+            var link = DNode.SelectSingleNode("//meta[@property='twitter:image']");
+            string image = link.Attributes["content"].Value;
             string description = GetText("//div[@class='uk-card uk-card-body uk-card-default uk-card-bodyh']");
 
             Spare spare = new Spare();

@@ -18,18 +18,19 @@ namespace Database
                 var admin = new AppUser
                 {
                     UserName = "admin",
-                    Email = "admin@test.com"
+                    Email = "admin@mail.com"
                 };
 
                 var user = new AppUser
                 {
                     UserName = "user",
-                    Email = "user@test.com"
+                    Email = "user@mail.com"
                 };
 
                 await manager.CreateAsync(admin, "Pa$$w0rd");
                 await manager.AddClaimAsync(admin, new Claim("role", "admin"));
                 await manager.CreateAsync(user, "Pa$$w0rd");
+                await manager.AddClaimAsync(user, new Claim("role", "user"));
             }
 
             if (!context.Spares.Any() && !context.Categories.Any())

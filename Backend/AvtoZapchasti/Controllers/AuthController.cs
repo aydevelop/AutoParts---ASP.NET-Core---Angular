@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace AvtoZapchasti.Controllers
@@ -48,6 +49,8 @@ namespace AvtoZapchasti.Controllers
             };
 
             var result = await _userManager.CreateAsync(user, userRegisterAction.Password);
+            await _userManager.AddClaimAsync(user, new Claim("role", "user"));
+
             if (result.Succeeded)
             {
                 string site = user.SiteUrl ?? "";

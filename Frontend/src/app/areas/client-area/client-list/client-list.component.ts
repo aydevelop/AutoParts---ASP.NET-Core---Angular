@@ -1,7 +1,22 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { AuthService } from 'src/app/auth/auth.service';
 import { ISpare } from 'src/app/shared/models/spare';
 import { SpareService } from 'src/app/spare/spare.service';
+import { environment } from 'src/environments/environment';
+import { ChartComponent } from 'ng-apexcharts';
+
+import {
+    ApexNonAxisChartSeries,
+    ApexResponsive,
+    ApexChart,
+} from 'ng-apexcharts';
+
+export type ChartOptions = {
+    series: ApexNonAxisChartSeries;
+    chart: ApexChart;
+    responsive: ApexResponsive[];
+    labels: any;
+};
 
 @Component({
     selector: 'app-client-list',
@@ -14,6 +29,11 @@ export class ClientListComponent implements OnInit {
     spares!: ISpare[];
     map = new Map();
     arrCategories: string[] = [];
+    views: number = 1;
+    baseUrl = environment.apiUrl;
+
+    @ViewChild('chart') chart: ChartComponent;
+    public chartOptions: Partial<ChartOptions> | any;
 
     constructor(
         private authSerice: AuthService,
@@ -37,6 +57,7 @@ export class ClientListComponent implements OnInit {
 
     calc() {
         for (const el of this.spares) {
+            this.views = this.views + (el.viewCount || 0);
             let check = this.map.get(el.category?.name);
             if (check != undefined) {
                 let check2 = +check;
@@ -50,8 +71,34 @@ export class ClientListComponent implements OnInit {
             }
         }
 
+        let keys: string[] = [];
+        let values: number[] = [];
         this.map.forEach((value, key, map) => {
             this.arrCategories.push(key + ' = ' + value);
+            keys.push(key);
+            values.push(Number.parseInt(value));
         });
+
+        this.chartOptions = {
+            series: values,
+            chart: {
+                width: 650,
+                type: 'pie',
+            },
+            labels: keys,
+            responsive: [
+                {
+                    breakpoint: 480,
+                    options: {
+                        chart: {
+                            width: 500,
+                        },
+                        legend: {
+                            position: 'bottom',
+                        },
+                    },
+                },
+            ],
+        };
     }
 }

@@ -15,4 +15,5 @@ export interface ISpare {
     category?: ICategory;
     providerId: string;
     provider?: IProvider;
+    viewCount?: number;
 }

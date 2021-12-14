@@ -5,6 +5,7 @@
         "**/.hg": true,
         "**/CVS": true,
         "**/.DS_Store": true,
+        "**/Thumbs.db": true,
         "**/node_modules": true,
         "**/tsconfig.spec.json": true,
         "**/.browserslistrc": true,
@@ -28,7 +29,9 @@
         "**/.vscode": true,
         "**/yarn-error.log": true,
         "**/yarn.lock": true,
-        "**/.prettierrc": true
+        "**/.prettierrc": true,
+        "**/tsconfig.json.bak": true,
+        "**/index.html.bak": true
     },
     "explorerExclude.backup": null
 }
