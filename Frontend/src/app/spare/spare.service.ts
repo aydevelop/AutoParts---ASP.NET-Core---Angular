@@ -66,6 +66,10 @@ export class SpareService {
         );
     }
 
+    getSpareAll() {
+        return this.http.get<ISpare[]>(this.baseUrl + '/spare');
+    }
+
     getCategories() {
         return this.http.get<ICategory[]>(this.baseUrl + '/category');
     }

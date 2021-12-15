@@ -8,18 +8,32 @@
                     <span class="fa fa-car" aria-hidden="true"></span>
                 </div>
                 <div class="text-primary text-center mt-3"><h4>Spares</h4></div>
-                <div class="text-primary text-center mt-2"><h1>234</h1></div>
+                <div class="text-primary text-center mt-2">
+                    <h1>{{ spares?.length || 0 }}</h1>
+                </div>
             </div>
         </div>
         <div class="col-md-3">
             <div class="card border-primary mx-sm-1 p-3">
                 <div
-                    class="card border-primary shadow text-primary p-3 my-card text-ce"
+                    class="
+                        card
+                        border-primary
+                        shadow
+                        text-primary
+                        p-3
+                        my-card
+                        text-ce
+                    "
                 >
                     <span class="fa fa-pie-chart" aria-hidden="true"></span>
                 </div>
                 <div class="text-primary text-center mt-3"><h4>Brands</h4></div>
-                <div class="text-primary text-center mt-2"><h1>9332</h1></div>
+                <div class="text-primary text-center mt-2">
+                    <h1>
+                        <h1>{{ brands?.length || 0 }}</h1>
+                    </h1>
+                </div>
             </div>
         </div>
         <div class="col-md-3">
@@ -30,7 +44,9 @@
                     <span class="fa fa-sitemap" aria-hidden="true"></span>
                 </div>
                 <div class="text-primary text-center mt-3"><h4>Models</h4></div>
-                <div class="text-primary text-center mt-2"><h1>346</h1></div>
+                <div class="text-primary text-center mt-2">
+                    <h1>{{ models?.length || 0 }}</h1>
+                </div>
             </div>
         </div>
         <div class="col-md-3">
@@ -43,7 +59,9 @@
                 <div class="text-primary text-center mt-3">
                     <h4>Categories</h4>
                 </div>
-                <div class="text-primary text-center mt-2"><h1>346</h1></div>
+                <div class="text-primary text-center mt-2">
+                    <h1>{{ categories?.length || 0 }}</h1>
+                </div>
             </div>
         </div>
     </div>

@@ -8,6 +8,7 @@ import { ClientListComponent } from './areas/client-area/client-list/client-list
 import { LoginComponent } from './auth/login/login.component';
 import { RegisterComponent } from './auth/register/register.component';
 import { HomeComponent } from './home/home/home.component';
+import { IsAdminGuard } from './is-admin.guard';
 import { SpareDetailsComponent } from './spare/spare-details/spare-details.component';
 
 const routes: Routes = [
@@ -18,6 +19,7 @@ const routes: Routes = [
 
     {
         path: 'admin-area',
+        canActivate: [IsAdminGuard],
         component: AdminIndexComponent,
         children: [
             { path: '', component: AdminSpareListComponent },

@@ -31,7 +31,8 @@
         "**/yarn.lock": true,
         "**/.prettierrc": true,
         "**/tsconfig.json.bak": true,
-        "**/index.html.bak": true
+        "**/index.html.bak": true,
+        "**/styles.scss.bak": true
     },
     "explorerExclude.backup": null
 }

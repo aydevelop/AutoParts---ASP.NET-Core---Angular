@@ -16,15 +16,17 @@ namespace Infrastructure.Provider
         private readonly string _host = "";
         private readonly ILogger<TaskRunner> _logger;
         private List<ItemProvider> _providers = new List<ItemProvider>();
+        AppDbContext _db;
 
         public TemanComUa(AppDbContext db, ILogger<TaskRunner> logger, string host) : base(db)
         {
+            this._db = db;
             this._logger = logger;
             this._host = host;
 
-            //_providers.Add(new ItemProvider() { brand = EnumBrand.Audi, url = _host + "/cars/audi/" });
-            //_providers.Add(new ItemProvider() { brand = EnumBrand.Audi, url = _host + "/cars/bmw/" });
             _providers.Add(new ItemProvider() { brand = EnumBrand.Audi, url = _host + "/cars/mercedesbenz" });
+            _providers.Add(new ItemProvider() { brand = EnumBrand.Audi, url = _host + "/cars/audi/" });
+            _providers.Add(new ItemProvider() { brand = EnumBrand.Audi, url = _host + "/cars/bmw/" });
         }
 
         public override void Run()
@@ -139,7 +141,7 @@ namespace Infrastructure.Provider
 
             string price = GetText("//div[@class='price']").Split(' ')[0];
             var link = DNode.SelectSingleNode("//div[@class='product-image']//img");
-            string image = link.Attributes["data-src"].Value;
+            string image = _host + link.Attributes["data-src"].Value;
             string description = GetText("//div[@class='inner-description']");
 
             Spare spare = new Spare();
@@ -152,8 +154,8 @@ namespace Infrastructure.Provider
             spare.Url = url;
             spare.ProviderId = providerId;
 
-            context.Spares.Add(spare);
-            context.SaveChanges();
+            _db.Spares.Add(spare);
+            _db.SaveChanges();
         }
     }
 }

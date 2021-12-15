@@ -15,11 +15,12 @@ import { SpareService } from '../spare.service';
 export class SpareListComponent implements OnInit {
     spares!: ISpare[];
     params: IFilterParams = new IFilterParams();
-    totalCount!: number;
+    totalCount: number = -1;
     categories!: ICategory[];
     brands!: IBrand[];
     models!: IModel[];
     search: string = '';
+    isLoading: boolean = false;
 
     constructor(private spareService: SpareService) {}
 
@@ -31,6 +32,7 @@ export class SpareListComponent implements OnInit {
     }
 
     getSpares() {
+        this.isLoading = true;
         this.spareService.getSpares(this.params).subscribe(
             (resp: any) => {
                 this.spares = resp.data;
@@ -38,9 +40,11 @@ export class SpareListComponent implements OnInit {
                 this.params.pageNumber = resp.pageIndex;
                 this.params.pageSize = resp.pageSize;
                 this.params.search = this.search;
+                this.isLoading = false;
             },
             (error) => {
                 console.log(error);
+                this.isLoading = false;
             }
         );
     }

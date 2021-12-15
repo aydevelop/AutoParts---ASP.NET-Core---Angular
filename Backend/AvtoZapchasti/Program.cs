@@ -38,7 +38,7 @@ namespace AvtoZapchasti
                 await DbSeed.SeedAsync(db, userManager);
                 logger.LogInformation("Migration completed");
 
-                //var section = config.GetSection("Providers");
+                var section = config.GetSection("Providers");
                 //new AutokladUa(db, taskLogger, section["Autoklad"]).Run();
                 //new TemanComUa(db, taskLogger, section["Teman"]).Run();
                 //new AutocompassComUa(db, taskLogger, section["Autocompass"]).Run();
